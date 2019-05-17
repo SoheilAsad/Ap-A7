@@ -53,6 +53,7 @@ private:
     std::vector<Customer*> customer_list;
     std::vector<Film*> film_list;
     CommandHandeler* command_handeler;
+    std::map<int,int> publishers_money;
     int customer_num;
     int film_num;
 

@@ -14,6 +14,7 @@ public:
     int get_password();
     virtual std::string get_type();
     int get_id();
+    void increase_money(int amout);
 private:
     int id;
     std::string username;

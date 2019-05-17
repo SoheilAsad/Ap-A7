@@ -9,8 +9,8 @@
 class Publisher : public Customer
 {
 public:
-    Publisher(map<string,string>& command_elements, int _id);
-
+    Publisher(std::map<std::string,std::string>& command_elements, int _id);
+    virtual std::string get_type();
 
 };
 

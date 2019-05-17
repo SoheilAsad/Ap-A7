@@ -35,3 +35,8 @@ int Customer::get_id()
 {
     return id;
 }
+
+void Customer::increase_money(int amout)
+{
+    money += amout;
+}

@@ -69,10 +69,14 @@ void Channel::singup_customer()
         throw BadRequest();
     command_handeler->check_singup_syntax_correction();
     if(is_customer_a_publisher())
+    {
         customer_list.push_back(new Publisher(command_elements,customer_num));
+        publishers_money.insert(pair<int,int>(customer_num,0));
+    }
     else
         customer_list.push_back(new Customer(command_elements,customer_num));
     customer = customer_list.back();
+    customer_num++;
 }
 
 void Channel::login_customer()
@@ -89,6 +93,14 @@ void Channel::publish_the_film()
         throw PermissionDenied();
     command_handeler->check_film_publishing_syntax_correction();
     film_list.push_back(new Film(film_num,command_elements,customer->get_id()));
+    film_num++;
+}
+
+void Channel::give_money_to_publisher()
+{   
+    command_handeler->check_getting_money_syntax_correction();
+    customer->increase_money(publishers_money[customer->get_id()]);
+    publishers_money[customer->get_id()] = 0 ;
 }
 
 void Channel::do_post_command()

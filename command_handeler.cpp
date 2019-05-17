@@ -124,3 +124,8 @@ void CommandHandeler::check_film_publishing_syntax_correction()
     }
 }
 
+void CommandHandeler::check_getting_money_syntax_correction()
+{
+	if(command_elements.size() != 2)
+		throw BadRequest();
+}
