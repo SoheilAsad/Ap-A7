@@ -106,3 +106,21 @@ void CommandHandeler::check_login_syntax_correction()
         throw BadRequest();
     }
 }
+
+void CommandHandeler::check_film_publishing_syntax_correction()
+{
+	if(command_elements.size() != 8)
+		throw BadRequest();
+
+	if(!command_elements.count("name") || !command_elements.count("summary") || !command_elements.count("director"))
+		throw BadRequest();
+	
+	try{
+        stoi(command_elements["year"]);
+		stoi(command_elements["length"]);
+		stoi(command_elements["price"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}
+

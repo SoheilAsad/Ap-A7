@@ -17,6 +17,7 @@ public:
     
     void check_singup_syntax_correction();
     void check_login_syntax_correction();
+    void check_film_publishing_syntax_correction();
 
 private:
     std::vector< std::string > command_line ;

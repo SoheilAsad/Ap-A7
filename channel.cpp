@@ -6,6 +6,7 @@
 #include "customer.h"
 #include "publisher.h"
 #include "exception.h"
+#include "film.h"
 #include "command_handeler.h"
 
 
@@ -82,18 +83,12 @@ void Channel::login_customer()
         throw BadRequest();
 }
 
-void Channel::do_command()
+void Channel::publish_the_film()
 {
-    if(command_elements["order_type"] == "POST")
-        do_post_command();
-    else if(command_elements["order_type"] == "GET")
-        do_get_command();
-    else if(command_elements["order_type"] == "DELETE")
-        do_delete_command();
-    else if(command_elements["order_type"] == "PUT")
-        do_put_command();
-    else 
-        throw BadRequest();
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    command_handeler->check_film_publishing_syntax_correction();
+    film_list.push_back(new Film(film_num,command_elements,customer->get_id()));
 }
 
 void Channel::do_post_command()
@@ -155,4 +150,18 @@ void Channel::do_put_command()
         edit_film_info();
     else
         throw NotFound();
+}
+
+void Channel::do_command()
+{
+    if(command_elements["order_type"] == "POST")
+        do_post_command();
+    else if(command_elements["order_type"] == "GET")
+        do_get_command();
+    else if(command_elements["order_type"] == "DELETE")
+        do_delete_command();
+    else if(command_elements["order_type"] == "PUT")
+        do_put_command();
+    else 
+        throw BadRequest();
 }
