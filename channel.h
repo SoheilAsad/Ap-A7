@@ -15,6 +15,7 @@ public:
     void login_customer();
     bool is_username_used(std::string username);
     Customer* find_customer_to_login();
+    bool is_customer_a_publisher();
 
 private:
     std::map<std::string,std::string> command_elements;

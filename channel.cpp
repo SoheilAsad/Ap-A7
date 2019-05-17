@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "customer.h"
+#include "publisher.h"
 #include "exception.h"
 #include "command_handeler.h"
 
@@ -26,6 +27,13 @@ Customer* Channel::find_customer_to_login()
     return NULL;
 }
 
+bool Channel::is_customer_a_publisher()
+{
+    if(command_elements.count("username"))
+		return true;
+    return false;
+}
+
 void Channel::do_primitive_commands()
 {
     if(command_elements["order_type"] == "POST")
@@ -46,7 +54,10 @@ void Channel::singup_customer()
     if(is_username_used(command_elements["username"]))
         throw BadRequest();
     command_handeler->check_singup_syntax_correction();
-    customer_list.push_back(new Customer(command_elements,customer_num)); //check for publisher
+    if(is_customer_a_publisher())
+        customer_list.push_back(new Publisher(command_elements,customer_num));
+    else
+        customer_list.push_back(new Customer(command_elements,customer_num));
     customer = customer_list.back();
 }
 
