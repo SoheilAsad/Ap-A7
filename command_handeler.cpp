@@ -1,13 +1,19 @@
+#include "command_handeler.h"
+
 #include <iostream>
 #include <vector>
 #include <map>
 #include <exception>
 #include <regex>
 
-#include "command_handeler.h"
 #include "exception.h"
 
 using namespace std;
+
+CommandHandeler::CommandHandeler()
+	:command_line(vector<string>())
+{
+}
 
 void CommandHandeler::split_up_in_space_place(string& all_words, int space_place)
 {
@@ -60,8 +66,6 @@ void CommandHandeler::separate_command_head_elements()
 	else
 		command_elements.insert(pair<string, string>("order", command_line[1]));
 }
-
-
 
 std::map<std::string,std::string> CommandHandeler::get_command()
 {
