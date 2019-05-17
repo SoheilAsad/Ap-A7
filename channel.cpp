@@ -11,6 +11,12 @@
 
 using namespace std;
 
+Channel::Channel()
+{
+    customer_num = 0;
+    film_num = 0;
+}
+
 bool Channel::is_username_used(std::string username)
 {
     for(int i = 0; i < customer_list.size(); i++)
@@ -30,6 +36,13 @@ Customer* Channel::find_customer_to_login()
 bool Channel::is_customer_a_publisher()
 {
     if(command_elements.count("username"))
+		return true;
+    return false;
+}
+
+bool Channel::is_id_in_command_elements()
+{
+    if(command_elements.count("film_id"))
 		return true;
     return false;
 }
@@ -67,4 +80,79 @@ void Channel::login_customer()
     customer = find_customer_to_login();
     if(customer == NULL)
         throw BadRequest();
+}
+
+void Channel::do_command()
+{
+    if(command_elements["order_type"] == "POST")
+        do_post_command();
+    else if(command_elements["order_type"] == "GET")
+        do_get_command();
+    else if(command_elements["order_type"] == "DELETE")
+        do_delete_command();
+    else if(command_elements["order_type"] == "PUT")
+        do_put_command();
+    else 
+        throw BadRequest();
+}
+
+void Channel::do_post_command()
+{
+    if(command_elements["order"] == "film?")
+        publish_the_film();
+    else if(command_elements["order"] == "money")
+        give_money_to_publisher();
+    else if(command_elements["order"] == "replies?")
+        reply_to_comment();
+    else if(command_elements["order"] == "followers?")
+        follow_publisher();
+    else if(command_elements["order"] == "money?")
+        increase_money();
+    else if(command_elements["order"] == "buy?")
+        buy_the_film();
+    else if(command_elements["order"] == "rate?")
+        rate_to_film();
+    else if(command_elements["order"] == "comments?")
+        comment_on_the_film();
+    else
+        throw NotFound();
+}
+
+void Channel::do_get_command()
+{
+    if(command_elements["order"] == "followers")
+        show_followers();
+    else if(command_elements["order"] == "published?")
+        show_publisher_films();
+    else if(command_elements["order"] == "film?")
+    {
+        if(is_id_in_command_elements())
+            show_film_details();
+        else
+            search_in_films();
+    }
+    else if(command_elements["order"] == "purchased?")
+        show_customer_purchased_films();
+    else if(command_elements["order"] == "notifications")
+        show_massages();
+    else
+        throw NotFound();
+}
+
+void Channel::do_delete_command()
+{
+    if(command_elements["order"] == "films?")
+        delete_film();
+    else if(command_elements["order"] == "comments?")
+        delete_comment();
+    else
+        throw NotFound();
+}
+
+void Channel::do_put_command()
+{
+    if(command_elements["order"] == "films?")
+        edit_film_info();
+    else
+        throw NotFound();
 }
