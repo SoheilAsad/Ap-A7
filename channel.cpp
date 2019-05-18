@@ -186,6 +186,15 @@ vector<Film*> Channel::find_films_are_on()
     return films;
 }
 
+vector<Film*> Channel::find_customer_buyed_films()
+{
+    vector<Film*> films;
+    for(int i = 0; i < film_list.size(); i++)
+        if(film_list[i]->is_customer_buyed_film_before(customer->get_id()))
+            films.push_back(film_list[i]);
+    return films;
+}
+
 vector<Film*> Channel::find_publisher_films(int publisher_id)
 {
     vector<Film*> publisher_films;
@@ -479,6 +488,14 @@ void Channel::show_film_details()
         throw NotFound();
     film->show_details();
     show_recommendation_films();
+}
+
+void Channel::show_customer_purchased_films()
+{
+    command_handeler->check_show_publisher_films_syntax_correction();
+    vector<Film*>films = find_customer_buyed_films();
+    vector<Film*>films = filter_films_list(films);
+    print_films_info(films);
 }
 
 void Channel::do_post_command()

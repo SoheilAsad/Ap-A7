@@ -33,6 +33,7 @@ public:
     void print_films_info(std::vector<Film*> publisher_films);
     std::vector<Film*> find_publisher_films(int publisher_id);
     std::vector<Film*> find_films_are_on();
+    std::vector<Film*> find_customer_buyed_films();
     void show_recommendation_films();
     std::vector<Film*> find_top_films();
     
