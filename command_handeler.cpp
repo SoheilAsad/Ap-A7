@@ -157,3 +157,15 @@ void CommandHandeler::check_following_syntax_correction()
         throw BadRequest();
     }
 }
+
+void CommandHandeler::check_increase_money_syntax_correction()
+{
+	if(command_elements.size() != 3)
+		throw BadRequest();
+	
+	try{
+        stoi(command_elements["amount"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}

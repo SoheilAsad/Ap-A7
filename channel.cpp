@@ -177,6 +177,13 @@ void Channel::follow_publisher()
     cout <<"OK" <<endl;
 }
 
+void Channel::increase_money()
+{
+    command_handeler->check_increase_money_syntax_correction();
+    customer->increase_money(stoi(command_elements["amount"]));
+    cout <<"OK" <<endl;
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")
