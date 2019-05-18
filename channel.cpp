@@ -524,6 +524,20 @@ void Channel::delete_film()
     cout <<"OK" <<endl;
 }
 
+void Channel::delete_comment()
+{
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    command_handeler->check_delete_comment_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    if(film->get_publisher_id() != customer->get_id())
+        throw PermissionDenied();
+    film->delete_comment(stoi(command_elements["comment_id"]));
+    cout <<"OK" <<endl;
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")

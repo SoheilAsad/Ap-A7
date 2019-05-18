@@ -168,3 +168,15 @@ void Film::delete_film()
 {
     film_state = "off";
 }
+
+void Film::delete_comment(int comment_id)
+{
+    for(int i = 0; i < comments_list.size(); i++)
+        if(comments_list[i]->get_id() == comment_id)
+        {
+            delete comments_list[i];
+            comments_list.erase(comments_list.begin(),comments_list.begin()+1);
+            return;
+        }
+    throw NotFound();
+}

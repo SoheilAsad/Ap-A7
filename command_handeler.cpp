@@ -255,3 +255,16 @@ void CommandHandeler::check_get_notification_syntax_correction()
     	throw BadRequest();
     }
 }
+
+void CommandHandeler::check_delete_comment_syntax_correction()
+{
+	if(command_elements.size() != 4)
+		throw BadRequest();
+	
+	try{
+        stoi(command_elements["film_id"]);
+		stoi(command_elements["comment_id"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}
