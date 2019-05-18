@@ -57,3 +57,10 @@ void Customer::add_customer_to_followers(int follower_id)
 std::vector<int> Customer::get_followers()
 {
 }
+
+void Customer::pay_money(int price)
+{
+    if(money < price)
+        throw PermissionDenied();
+    money -= price ;
+}

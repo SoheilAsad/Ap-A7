@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 #include "customer.h"
 #include "publisher.h"
@@ -29,7 +30,8 @@ bool Channel::is_username_used(std::string username)
 Customer* Channel::find_customer_to_login()
 {
     for(int i = 0; i < customer_list.size(); i++)
-        if(customer_list[i]->get_name() == command_elements["username"] && customer_list[i]->get_password() == stoi(command_elements["password"]))
+        if(customer_list[i]->get_name() == command_elements["username"] &&
+            customer_list[i]->get_password() == stoi(command_elements["password"]))
             return customer_list[i];
     return NULL;
 }
@@ -79,7 +81,6 @@ void Channel::send_reply_massage(int writer_id)
         + " reply to your comment." ;
     Customer* writer = find_customer(writer_id);
     writer->add_massage_to_new_massages(massage);
-    cout << "OK" <<endl;
 }
 
 void Channel::send_publishing_massage_to_followers()
@@ -91,6 +92,39 @@ void Channel::send_publishing_massage_to_followers()
         + " register new film." ;
     for(int i = 0; i < followers.size(); i++)
         followers[i]->add_massage_to_new_massages(massage);
+}
+
+void Channel::send_following_massage(int publisher_id)
+{
+    string massage;
+    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " follow you." ;
+    Customer* publisher = find_customer(publisher_id);
+    publisher->add_massage_to_new_massages(massage);
+}
+
+void Channel::send_buying_massage_to_publisher(Film* film)
+{
+    string massage;
+    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " buy your film "
+        + film->get_name() + " with id " + to_string(film->get_id()) ;
+    Customer* publisher = find_customer(film->get_publisher_id());
+    publisher->add_massage_to_new_massages(massage);
+}
+
+int Channel::calculate_publisher_share(int price, float rate)
+{
+    if(rate < 5)
+        return floor(price * 0.8);
+    else if(rate < 8)
+        return floor(price * 0.9);
+    else
+        return floor(price * 0.95);
+}
+
+void Channel::add_money_to_channel(Film* film)
+{
+    int money = calculate_publisher_share(film->get_price(),film->get_rate());
+    publishers_money[film->get_publisher_id()] += money;
 }
 
 void Channel::do_primitive_commands()
@@ -165,6 +199,7 @@ void Channel::reply_to_comment()
     int writer_id = film->get_comment_writer_id(stoi(command_elements["comment_id"]));
     film->write_repley_in_comment_box(stoi(command_elements["comment_id"]),command_elements["content"]);
     send_reply_massage(writer_id);
+    cout <<"OK" <<endl;
 }
 
 void Channel::follow_publisher()
@@ -174,6 +209,7 @@ void Channel::follow_publisher()
     if(publisher == NULL)
         throw NotFound();
     publisher->add_customer_to_followers(customer->get_id());
+    send_following_massage(publisher->get_id());
     cout <<"OK" <<endl;
 }
 
@@ -182,6 +218,21 @@ void Channel::increase_money()
     command_handeler->check_increase_money_syntax_correction();
     customer->increase_money(stoi(command_elements["amount"]));
     cout <<"OK" <<endl;
+}
+
+void Channel::buy_the_film()
+{
+    command_handeler->check_buy_film_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    if(!film->is_customer_buyed_film_before(customer->get_id()))
+    {
+        customer->pay_money(film->get_price());
+        add_money_to_channel(film);
+        film->add_customer_to_buyer(customer->get_id());
+        send_buying_massage_to_publisher(film);
+    }
 }
 
 void Channel::do_post_command()

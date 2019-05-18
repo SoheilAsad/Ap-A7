@@ -169,3 +169,15 @@ void CommandHandeler::check_increase_money_syntax_correction()
         throw BadRequest();
     }
 }
+
+void CommandHandeler::check_buy_film_syntax_correction()
+{
+	if(command_elements.size() != 3)
+		throw BadRequest();
+	
+	try{
+        stoi(command_elements["film_id"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}

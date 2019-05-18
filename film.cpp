@@ -10,7 +10,7 @@
 using namespace std;
 
 Film::Film(int _id, map<string,string> command_elements, int _publisher_id)
-    : buyers_id(vector<int>())
+    : buyers_id(vector<int>()), raters_id(vector<int>())
 {
     id = _id;
     year = stoi(command_elements["year"]);
@@ -50,4 +50,43 @@ void Film::write_repley_in_comment_box(int comment_id,string content)
     if(comment == NULL)
         throw NotFound();
     comment->write_repley(content);
+}
+
+int Film::get_price()
+{
+    return price;
+}
+
+int Film::get_publisher_id()
+{
+    return publisher_id;
+}
+
+float Film::get_rate()
+{
+    float rate = 0;
+    for(int i = 0; i < raters_id.size(); i++ )
+        rate += rates[raters_id[i]];
+    rate = rate / raters_id.size();
+    float value = (int)(rate * 100 ); 
+    rate = (float)value / 100; 
+    return rate;
+}
+
+bool Film::is_customer_buyed_film_before(int customer_id)
+{
+    for(int i = 0; i < buyers_id.size(); i++)
+        if(buyers_id[i] == customer_id)
+            return true;
+    return false;
+}
+
+void Film::add_customer_to_buyer(int customer_id)
+{
+    buyers_id.push_back(customer_id);
+}
+
+string Film::get_name()
+{
+    return name;
 }
