@@ -14,8 +14,8 @@ using namespace std;
 
 Channel::Channel()
 {
-    customer_num = 0;
-    film_num = 0;
+    customer_num = 1;
+    film_num = 1;
 }
 
 bool Channel::is_username_used(std::string username)
@@ -46,6 +46,31 @@ bool Channel::is_id_in_command_elements()
     if(command_elements.count("film_id"))
 		return true;
     return false;
+}
+
+Customer* Channel::find_customer(int id)
+{
+    for(int i = 0; i < customer_list.size(); i++)
+        if(customer_list[i]->get_id() == id)
+            return customer_list[i];
+    return NULL;
+}
+
+Film* Channel::find_film(int film_id)
+{
+    for(int i = 0; i < film_list.size(); i++)
+        if(film_list[i]->get_id() == film_id)
+            return film_list[i];
+    return NULL;
+}
+
+void Channel::send_reply_massage(int writer_id)
+{
+    string massage;
+    massage = "Publisher " + customer->get_name() + " with id " + to_string(customer->get_id()) 
+        + " reply to your comment." ;
+    Customer* writer = find_customer(writer_id);
+    writer->add_massage_to_new_massages(massage);
 }
 
 void Channel::do_primitive_commands()
@@ -101,6 +126,19 @@ void Channel::give_money_to_publisher()
     command_handeler->check_getting_money_syntax_correction();
     customer->increase_money(publishers_money[customer->get_id()]);
     publishers_money[customer->get_id()] = 0 ;
+}
+
+void Channel::reply_to_comment()
+{
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    command_handeler->check_replies_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    int writer_id = film->get_comment_writer_id(stoi(command_elements["comment_id"]));
+    film->write_repley_in_comment_box(stoi(command_elements["comment_id"]),command_elements["content"]);
+    send_reply_massage(writer_id);
 }
 
 void Channel::do_post_command()

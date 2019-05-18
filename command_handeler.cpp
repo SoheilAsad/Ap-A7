@@ -129,3 +129,19 @@ void CommandHandeler::check_getting_money_syntax_correction()
 	if(command_elements.size() != 2)
 		throw BadRequest();
 }
+
+void CommandHandeler::check_replies_syntax_correction()
+{
+	if(command_elements.size() != 5)
+		throw BadRequest();
+	
+	if(!command_elements.count("content"))
+		throw BadRequest();
+	
+	try{
+        stoi(command_elements["film_id"]);
+		stoi(command_elements["comment_id"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}

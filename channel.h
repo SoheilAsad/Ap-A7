@@ -18,6 +18,9 @@ public:
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();
+    Film* find_film(int film_id);
+    Customer* find_customer(int id);
+    void send_reply_massage(int writer_id);
 
     void do_primitive_commands();
     void do_command();
