@@ -61,8 +61,8 @@ public:
 
     void show_followers();
     void show_publisher_films();
-    void show_film_details();
     void search_in_films();
+    void show_film_details();
     void show_customer_purchased_films();
     void show_massages();
 

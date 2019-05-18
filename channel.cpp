@@ -418,6 +418,13 @@ void Channel::show_publisher_films()
     print_films_info(publisher_films);
 }
 
+void Channel::search_in_films()
+{
+    command_handeler->check_show_publisher_films_syntax_correction();
+    vector<Film*>films = filter_films_list(film_list);
+    print_films_info(films);
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")
