@@ -538,6 +538,20 @@ void Channel::delete_comment()
     cout <<"OK" <<endl;
 }
 
+void Channel::edit_film_info()
+{
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    command_handeler->check_edit_film_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    if(film->get_publisher_id() != customer->get_id())
+        throw PermissionDenied();
+    film->change_film_info(command_elements);
+    cout <<"OK" <<endl;
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")

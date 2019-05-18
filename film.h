@@ -34,6 +34,7 @@ public:
     void print_berif_info();
     void delete_film();
     void delete_comment(int comment_id);
+    void change_film_info(std::map<std::string,std::string>command_elements);
     
 private:
     int id;
@@ -41,7 +42,7 @@ private:
     int year;
     int length;
     int price;
-    std::string summery;
+    std::string summary;
     std::string director;
     int publisher_id;
     std::map<int,int> rates;

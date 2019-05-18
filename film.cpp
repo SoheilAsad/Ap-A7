@@ -17,7 +17,7 @@ Film::Film(int _id, map<string,string> command_elements, int _publisher_id)
     year = stoi(command_elements["year"]);
     length = stoi(command_elements["length"]);
     price = stoi(command_elements["price"]);
-    summery = command_elements["summary"];
+    summary = command_elements["summary"];
     director = command_elements["director"];
     publisher_id = _publisher_id;
     film_state = "on";
@@ -152,7 +152,7 @@ void Film::show_details()
     cout <<"Director = " <<director <<endl;
     cout <<"Length = " <<length <<endl;
     cout <<"Year = " <<year <<endl;
-    cout <<"Summary = " <<summery <<endl;
+    cout <<"Summary = " <<summary <<endl;
     cout <<"Rate = " <<get_rate() <<endl;
     cout <<"Price = " <<price <<endl <<endl;
     show_comments();
@@ -179,4 +179,18 @@ void Film::delete_comment(int comment_id)
             return;
         }
     throw NotFound();
+}
+
+void Film::change_film_info(map<string,string>command_elements)
+{
+    if(command_elements.count("name"))
+        name = command_elements["name"];
+    if(command_elements.count("year"))
+        year = stoi(command_elements["year"]);
+    if(command_elements.count("length"))
+        length = stoi(command_elements["length"]);
+    if(command_elements.count("summary"))
+        summary = command_elements["summary"];
+    if(command_elements.count("director"))
+        director = command_elements["director"];
 }

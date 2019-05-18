@@ -48,14 +48,12 @@ public:
     std::vector<Film*> filter_films_by_max_year(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_director(std::vector<Film*> publisher_films);
     
-
     void do_primitive_commands();
     void do_command();
     void do_post_command();
     void do_get_command();
     void do_delete_command();
     void do_put_command();
-
     void publish_the_film();
     void give_money_to_publisher();
     void reply_to_comment();
@@ -64,17 +62,14 @@ public:
     void buy_the_film();
     void rate_to_film();
     void comment_on_the_film();
-
     void show_followers();
     void show_publisher_films();
     void search_in_films();
     void show_film_details();
     void show_customer_purchased_films();
     void show_massages();
-
     void delete_film();
     void delete_comment();
-
     void edit_film_info();
 
 private:

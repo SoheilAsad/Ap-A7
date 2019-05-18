@@ -268,3 +268,25 @@ void CommandHandeler::check_delete_comment_syntax_correction()
         throw BadRequest();
     }
 }
+
+void CommandHandeler::check_edit_film_syntax_correction()
+{
+	try{
+        stoi(command_elements["film_id"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+
+	if(command_elements.count("year"))
+		try{
+    		stoi(command_elements["year"]);
+		}catch(exception ex){
+        	throw BadRequest();
+    	}
+	if(command_elements.count("length"))
+		try{
+        	stoi(command_elements["length"]);
+		}catch(exception ex){
+        	throw BadRequest();
+    	}
+}
