@@ -20,11 +20,16 @@ public:
     int get_publisher_id();
     float get_rate();
     std::string get_name();
+    std::string get_film_state();
+    int get_year();
+    std::string get_director_name();
     bool is_customer_buyed_film_before(int customer_id);
     void add_customer_to_buyer(int customer_id);
     void record_rate(int customer_id,int score);
     bool is_customer_rate_before(int customer_id);
     void add_comment_to_film(std::string content, int customer_id);
+    void print_info();
+    
 private:
     int id;
     std::string name;

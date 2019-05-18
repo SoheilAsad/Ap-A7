@@ -29,8 +29,19 @@ public:
     std::vector<Customer*> find_followers(std::vector<int> followers_id);
     void add_money_to_channel(Film* film);
     int calculate_publisher_share(int price, float rate);
-    std::vector<Customer*> sort_by_id(std::vector<Customer*> followers, int followers_num);
     void print_followers_info(std::vector<Customer*> followers);
+    void print_films_info(std::vector<Film*> publisher_films);
+    std::vector<Film*> find_publisher_films(int publisher_id);
+
+    std::vector<Customer*> sort_by_id(std::vector<Customer*> followers, int followers_num);
+    std::vector<Film*> sort_film_by_id(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_list(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_name(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_min_rate(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_min_year(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_price(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_max_year(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_director(std::vector<Film*> publisher_films);
 
     void do_primitive_commands();
     void do_command();

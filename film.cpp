@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "comment.h"
 #include "exception.h"
@@ -114,4 +115,25 @@ void Film::add_comment_to_film(string content, int customer_id)
 {
     comments_list.push_back(new Comment(comment_num,content,customer_id));
     comment_num++;
+}
+
+string Film::get_film_state()
+{
+    return film_state;
+}
+
+int Film::get_year()
+{
+    return year;
+}
+
+string Film::get_director_name()
+{
+    return director;
+}
+
+void Film::print_info()
+{
+    cout <<id <<" | " <<name <<" | " <<length <<" | " <<price <<" | " 
+        <<get_rate() <<" | " <<year <<" | " <<director ;
 }
