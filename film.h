@@ -29,6 +29,9 @@ public:
     bool is_customer_rate_before(int customer_id);
     void add_comment_to_film(std::string content, int customer_id);
     void print_info();
+    void show_details();
+    void show_comments();
+    void print_berif_info();
     
 private:
     int id;

@@ -149,8 +149,8 @@ vector<Customer*> Channel::sort_by_id(vector<Customer*> followers ,int followers
 {
    for (int i = 0; i < followers_num-1; i++)           
        for (int j = 0; j < followers_num-i-1; j++)  
-           if (followers[j]->get_id() > followers[j+1]->get_id()) 
-              swap(followers[j], followers[j+1]); 
+            if (followers[j]->get_id() > followers[j+1]->get_id()) 
+                swap(followers[j], followers[j+1]); 
     return followers;
 }
 
@@ -177,6 +177,15 @@ void Channel::print_films_info(vector<Film*> publisher_films)
     }
 }
 
+vector<Film*> Channel::find_films_are_on()
+{
+    vector<Film*> films;
+    for(int i = 0; i < film_list.size(); i++)
+        if(film_list[i]->get_film_state()=="on")
+            films.push_back(film_list[i]);
+    return films;
+}
+
 vector<Film*> Channel::find_publisher_films(int publisher_id)
 {
     vector<Film*> publisher_films;
@@ -190,8 +199,8 @@ vector<Film*> Channel::sort_film_by_id(vector<Film*> publisher_films)
 {
     for (int i = 0; i < publisher_films.size()-1; i++)           
        for (int j = 0; j < publisher_films.size()-i-1; j++)  
-           if (publisher_films[j]->get_id() > publisher_films[j+1]->get_id()) 
-              swap(publisher_films[j], publisher_films[j+1]); 
+            if (publisher_films[j]->get_id() > publisher_films[j+1]->get_id()) 
+                swap(publisher_films[j], publisher_films[j+1]); 
     return publisher_films;
 }
 
@@ -265,6 +274,42 @@ vector<Film*> Channel::filter_films_list(vector<Film*> publisher_films)
     if(command_elements.count("director"))
         publisher_films = filter_films_by_director(publisher_films);
     return publisher_films;
+}
+
+vector<Film*> Channel::sort_film_by_rate(vector<Film*> publisher_films)
+{
+    for (int i = 0; i < publisher_films.size()-1; i++)           
+       for (int j = 0; j < publisher_films.size()-i-1; j++)
+       {  
+            if(publisher_films[j]->get_rate() > publisher_films[j+1]->get_rate()) 
+                swap(publisher_films[j], publisher_films[j+1]);
+            if(publisher_films[j]->get_rate() == publisher_films[j+1]->get_rate() &&
+                publisher_films[j]->get_id() < publisher_films[j+1]->get_id())
+                swap(publisher_films[j], publisher_films[j+1]);
+       }
+    return publisher_films;
+}
+
+vector<Film*> Channel::find_top_films()
+{
+    vector<Film*> films = sort_film_by_rate(find_films_are_on());
+    vector<Film*> top_films;
+    for(int i = films.size()-1 ; i > films.size()-5 ; i--)
+        top_films.push_back(films[i]);
+    return top_films;
+}
+
+void Channel::show_recommendation_films()
+{
+    vector<Film*> films = find_top_films();
+    cout << "Recommendation Film" <<endl;
+    cout <<"#. Film Id | Film Name | Film Length | Film Director" <<endl;
+    for(int i = 0; i < films.size(); i++)
+    {
+        cout <<i+1 <<". " ;
+        films[i]->print_berif_info();
+        cout <<endl;
+    }
 }
 
 void Channel::do_primitive_commands()
@@ -421,8 +466,19 @@ void Channel::show_publisher_films()
 void Channel::search_in_films()
 {
     command_handeler->check_show_publisher_films_syntax_correction();
-    vector<Film*>films = filter_films_list(film_list);
+    vector<Film*>films = find_films_are_on();
+    vector<Film*>films = filter_films_list(films);
     print_films_info(films);
+}
+
+void Channel::show_film_details()
+{
+    command_handeler->check_buy_film_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    film->show_details();
+    show_recommendation_films();
 }
 
 void Channel::do_post_command()

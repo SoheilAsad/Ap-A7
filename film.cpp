@@ -137,3 +137,29 @@ void Film::print_info()
     cout <<id <<" | " <<name <<" | " <<length <<" | " <<price <<" | " 
         <<get_rate() <<" | " <<year <<" | " <<director ;
 }
+
+void Film::show_comments()
+{
+    cout <<"Comments" <<endl;
+    for(int i=0; i < comments_list.size(); i++)
+        comments_list[i]->show_info();
+}
+
+void Film::show_details()
+{
+    cout <<"Details of Film " <<name <<endl;
+    cout <<"Id = " <<id <<endl;
+    cout <<"Director = " <<director <<endl;
+    cout <<"Length = " <<length <<endl;
+    cout <<"Year = " <<year <<endl;
+    cout <<"Summary = " <<summery <<endl;
+    cout <<"Rate = " <<get_rate() <<endl;
+    cout <<"Price = " <<price <<endl <<endl;
+    show_comments();
+    cout <<endl;
+}
+
+void Film::print_berif_info()
+{
+    cout <<id <<" | " <<name <<" | " <<length <<" | " <<director ;
+}

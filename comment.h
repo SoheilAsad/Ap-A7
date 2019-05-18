@@ -12,6 +12,7 @@ public:
     int get_writer_id();
     int get_id();
     void write_repley(std::string _content);
+    void show_info();
 private:
     int id;
     std::string content;
