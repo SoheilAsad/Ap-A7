@@ -24,6 +24,7 @@ public:
     void add_customer_to_buyer(int customer_id);
     void record_rate(int customer_id,int score);
     bool is_customer_rate_before(int customer_id);
+    void add_comment_to_film(std::string content, int customer_id);
 private:
     int id;
     std::string name;

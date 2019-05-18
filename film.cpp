@@ -109,3 +109,9 @@ void Film::record_rate(int customer_id,int score)
         raters_id.push_back(customer_id);
     }
 }
+
+void Film::add_comment_to_film(string content, int customer_id)
+{
+    comments_list.push_back(new Comment(comment_num,content,customer_id));
+    comment_num++;
+}

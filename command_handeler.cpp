@@ -197,3 +197,18 @@ void CommandHandeler::check_rate_film_syntax_correction()
 	if(stoi(command_elements["score"]) < 1 || stoi(command_elements["score"]) > 10)
 		throw BadRequest();
 }
+
+void CommandHandeler::check_comment_film_syntax_correction()
+{
+	if(command_elements.size() != 4)
+		throw BadRequest();
+	
+	if(!command_elements.count("content"))
+		throw BadRequest();
+
+	try{
+        stoi(command_elements["film_id"]);
+    }catch(exception ex){
+        throw BadRequest();
+    }
+}

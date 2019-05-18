@@ -25,6 +25,7 @@ public:
     void send_following_massage(int publisher_id);
     void send_buying_massage_to_publisher(Film* film);
     void send_ratiing_massage(Film* film);
+    void send_commenting_massage(Film* film);
     std::vector<Customer*> find_followers(std::vector<int> followers_id);
     void add_money_to_channel(Film* film);
     int calculate_publisher_share(int price, float rate);
