@@ -106,7 +106,16 @@ void Channel::send_buying_massage_to_publisher(Film* film)
 {
     string massage;
     massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " buy your film "
-        + film->get_name() + " with id " + to_string(film->get_id()) ;
+        + film->get_name() + " with id " + to_string(film->get_id()) + ".";
+    Customer* publisher = find_customer(film->get_publisher_id());
+    publisher->add_massage_to_new_massages(massage);
+}
+
+void Channel::send_ratiing_massage(Film* film)
+{
+    string massage;
+    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " rate your film "
+        + film->get_name() + " with id " + to_string(film->get_id()) + ".";
     Customer* publisher = find_customer(film->get_publisher_id());
     publisher->add_massage_to_new_massages(massage);
 }
@@ -233,6 +242,17 @@ void Channel::buy_the_film()
         film->add_customer_to_buyer(customer->get_id());
         send_buying_massage_to_publisher(film);
     }
+}
+
+void Channel::rate_to_film()
+{
+    command_handeler->check_rate_film_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    film->record_rate(customer->get_id(),stoi(command_elements["score"]));
+    send_ratiing_massage(film);
+    cout <<"OK" <<endl;
 }
 
 void Channel::do_post_command()

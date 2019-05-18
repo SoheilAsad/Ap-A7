@@ -90,3 +90,22 @@ string Film::get_name()
 {
     return name;
 }
+
+bool Film::is_customer_rate_before(int customer_id)
+{
+    for(int i = 0; i < raters_id.size(); i++)
+        if(raters_id[i] == customer_id)
+            return true;
+    return false;
+}
+
+void Film::record_rate(int customer_id,int score)
+{
+    if(is_customer_rate_before(customer_id))
+        rates[customer_id] = score ;
+    else
+    {
+        rates.insert(pair<int,int>(customer_id,score));
+        raters_id.push_back(customer_id);
+    }
+}

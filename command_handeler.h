@@ -23,6 +23,7 @@ public:
     void check_following_syntax_correction();
     void check_increase_money_syntax_correction();
     void check_buy_film_syntax_correction();
+    void check_rate_film_syntax_correction();
 
 private:
     std::vector< std::string > command_line ;
