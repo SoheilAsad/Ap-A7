@@ -70,3 +70,28 @@ void Customer::print_info()
 {
     cout <<id <<" | " <<username <<" | " <<email ;
 }
+
+void Customer::show_unread_massages()
+{
+    cout <<"#. Notification Message" <<endl;
+    for(int i = new_massages.size()-1; i >= 0; i--)
+        cout <<new_massages.size()-i <<". " <<new_massages[i] <<endl;
+}
+
+void Customer::move_unread_massages_to_readed_box()
+{
+    for(int i =0; i < new_massages.size(); i)
+    {
+        readed_massages.push_back(new_massages[i]);
+        new_massages.erase(new_massages.begin(),new_massages.begin()+1);
+    }
+}
+
+void Customer::show_readed_massages(int limit)
+{
+    if(limit > readed_massages.size())
+        limit = readed_massages.size();
+     cout <<"#. Notification Message" <<endl;
+    for(int i = readed_massages.size()-1; i >= readed_massages.size()-limit; i--)
+        cout <<readed_massages.size()-i <<". " <<readed_massages[i] <<endl;
+}

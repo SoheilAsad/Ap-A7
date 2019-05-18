@@ -217,26 +217,41 @@ void CommandHandeler::check_show_publisher_films_syntax_correction()
 {
 	if(command_elements.count("min_rate"))
 		try{
-        stoi(command_elements["min_rate"]);
+        	stoi(command_elements["min_rate"]);
 		}catch(exception ex){
         	throw BadRequest();
     	}
 	if(command_elements.count("min_year"))
 		try{
-        stoi(command_elements["min_year"]);
+        	stoi(command_elements["min_year"]);
 		}catch(exception ex){
         	throw BadRequest();
     	}
 	if(command_elements.count("price"))
 		try{
-        stoi(command_elements["price"]);
+    		stoi(command_elements["price"]);
 		}catch(exception ex){
         	throw BadRequest();
     	}
 	if(command_elements.count("max_year"))
 		try{
-        stoi(command_elements["max_year"]);
+        	stoi(command_elements["max_year"]);
 		}catch(exception ex){
         	throw BadRequest();
     	}
+}
+
+void CommandHandeler::check_get_notification_syntax_correction()
+{
+	if(command_elements.size() != 4)
+		throw BadRequest();
+	
+	if(command_elements["read"] != "?")
+		throw BadRequest();
+
+	try{
+    	stoi(command_elements["limit"]);
+	}catch(exception ex){
+    	throw BadRequest();
+    }
 }

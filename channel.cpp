@@ -498,6 +498,20 @@ void Channel::show_customer_purchased_films()
     print_films_info(films);
 }
 
+void Channel::show_massages()
+{
+    if(command_elements.size() == 2)
+    {
+        customer->show_unread_massages();
+        customer->move_unread_massages_to_readed_box();
+    }
+    else
+    {
+        command_handeler->check_get_notification_syntax_correction();
+        customer->show_readed_massages(stoi(command_elements["limit"]));
+    }
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")

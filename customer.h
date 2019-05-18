@@ -20,6 +20,9 @@ public:
     virtual std::vector<int> get_followers();
     void pay_money(int price);
     void print_info();
+    void show_unread_massages();
+    void move_unread_massages_to_readed_box();
+    void show_readed_massages(int limit);
 protected:
     int id;
     std::string username;

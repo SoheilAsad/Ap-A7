@@ -26,6 +26,7 @@ public:
     void check_rate_film_syntax_correction();
     void check_comment_film_syntax_correction();
     void check_show_publisher_films_syntax_correction();
+    void check_get_notification_syntax_correction();
 
 private:
     std::vector< std::string > command_line ;
