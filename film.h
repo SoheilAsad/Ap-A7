@@ -32,6 +32,7 @@ public:
     void show_details();
     void show_comments();
     void print_berif_info();
+    void delete_film();
     
 private:
     int id;

@@ -512,6 +512,18 @@ void Channel::show_massages()
     }
 }
 
+void Channel::delete_film()
+{
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    command_handeler->check_buy_film_syntax_correction();
+    Film* film = find_film(stoi(command_elements["film_id"]));
+    if(film == NULL)
+        throw NotFound();
+    film->delete_film();
+    cout <<"OK" <<endl;
+}
+
 void Channel::do_post_command()
 {
     if(command_elements["order"] == "film?")

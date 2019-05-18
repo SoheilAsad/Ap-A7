@@ -163,3 +163,8 @@ void Film::print_berif_info()
 {
     cout <<id <<" | " <<name <<" | " <<length <<" | " <<director ;
 }
+
+void Film::delete_film()
+{
+    film_state = "off";
+}
