@@ -21,6 +21,8 @@ public:
     Film* find_film(int film_id);
     Customer* find_customer(int id);
     void send_reply_massage(int writer_id);
+    void send_publishing_massage_to_followers();
+    std::vector<Customer*> find_followers(std::vector<int> followers_id);
 
     void do_primitive_commands();
     void do_command();

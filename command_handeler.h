@@ -20,6 +20,7 @@ public:
     void check_film_publishing_syntax_correction();
     void check_getting_money_syntax_correction();
     void check_replies_syntax_correction();
+    void check_following_syntax_correction();
 
 private:
     std::vector< std::string > command_line ;

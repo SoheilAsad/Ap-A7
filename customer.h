@@ -16,7 +16,9 @@ public:
     int get_id();
     void increase_money(int amout);
     void add_massage_to_new_massages(std::string massage);
-private:
+    virtual void add_customer_to_followers(int follower_id);
+    virtual std::vector<int> get_followers();
+protected:
     int id;
     std::string username;
     int password;

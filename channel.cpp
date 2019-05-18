@@ -64,6 +64,14 @@ Film* Channel::find_film(int film_id)
     return NULL;
 }
 
+vector<Customer*> Channel::find_followers(vector<int> followers_id)
+{
+    vector<Customer*> followers;
+    for(int i = 0; i < followers_id.size(); i ++)
+        followers.push_back(find_customer(followers_id[i]));
+    return followers;
+}
+
 void Channel::send_reply_massage(int writer_id)
 {
     string massage;
@@ -71,6 +79,18 @@ void Channel::send_reply_massage(int writer_id)
         + " reply to your comment." ;
     Customer* writer = find_customer(writer_id);
     writer->add_massage_to_new_massages(massage);
+    cout << "OK" <<endl;
+}
+
+void Channel::send_publishing_massage_to_followers()
+{
+    vector<int> followers_id = customer->get_followers();
+    vector<Customer*> followers = find_followers(followers_id);
+    string massage;
+    massage = "Publisher " + customer->get_name() + " with id " + to_string(customer->get_id())
+        + " register new film." ;
+    for(int i = 0; i < followers.size(); i++)
+        followers[i]->add_massage_to_new_massages(massage);
 }
 
 void Channel::do_primitive_commands()
@@ -84,7 +104,8 @@ void Channel::do_primitive_commands()
         else
             throw NotFound();
     }
-    else
+    else    customer = customer_list.back();
+
         throw BadRequest();
 }
 
@@ -102,6 +123,7 @@ void Channel::singup_customer()
         customer_list.push_back(new Customer(command_elements,customer_num));
     customer = customer_list.back();
     customer_num++;
+    cout << "OK" <<endl;
 }
 
 void Channel::login_customer()
@@ -110,6 +132,7 @@ void Channel::login_customer()
     customer = find_customer_to_login();
     if(customer == NULL)
         throw BadRequest();
+    cout << "OK" <<endl;
 }
 
 void Channel::publish_the_film()
@@ -118,7 +141,9 @@ void Channel::publish_the_film()
         throw PermissionDenied();
     command_handeler->check_film_publishing_syntax_correction();
     film_list.push_back(new Film(film_num,command_elements,customer->get_id()));
+    send_publishing_massage_to_followers();
     film_num++;
+    cout << "OK" <<endl;
 }
 
 void Channel::give_money_to_publisher()
@@ -126,6 +151,7 @@ void Channel::give_money_to_publisher()
     command_handeler->check_getting_money_syntax_correction();
     customer->increase_money(publishers_money[customer->get_id()]);
     publishers_money[customer->get_id()] = 0 ;
+    cout << "OK" <<endl;
 }
 
 void Channel::reply_to_comment()
@@ -139,6 +165,16 @@ void Channel::reply_to_comment()
     int writer_id = film->get_comment_writer_id(stoi(command_elements["comment_id"]));
     film->write_repley_in_comment_box(stoi(command_elements["comment_id"]),command_elements["content"]);
     send_reply_massage(writer_id);
+}
+
+void Channel::follow_publisher()
+{
+    command_handeler->check_following_syntax_correction();
+    Customer* publisher = find_customer(stoi(command_elements["user_id"]));
+    if(publisher == NULL)
+        throw NotFound();
+    publisher->add_customer_to_followers(customer->get_id());
+    cout <<"OK" <<endl;
 }
 
 void Channel::do_post_command()

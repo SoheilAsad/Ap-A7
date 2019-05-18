@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 
+#include "exception.h"
+
 using namespace std;
 
 Customer::Customer(map<string,string>& command_elements, int _id)
@@ -45,4 +47,13 @@ void Customer::increase_money(int amout)
 void Customer::add_massage_to_new_massages(string massage)
 {
     new_massages.push_back(massage);
+}
+
+void Customer::add_customer_to_followers(int follower_id)
+{
+    throw BadRequest();
+}
+
+std::vector<int> Customer::get_followers()
+{
 }
