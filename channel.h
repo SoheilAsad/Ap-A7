@@ -29,6 +29,8 @@ public:
     std::vector<Customer*> find_followers(std::vector<int> followers_id);
     void add_money_to_channel(Film* film);
     int calculate_publisher_share(int price, float rate);
+    std::vector<Customer*> sort_by_id(std::vector<Customer*> followers, int followers_num);
+    void print_followers_info(std::vector<Customer*> followers);
 
     void do_primitive_commands();
     void do_command();

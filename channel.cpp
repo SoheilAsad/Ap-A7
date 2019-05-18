@@ -145,6 +145,27 @@ void Channel::add_money_to_channel(Film* film)
     publishers_money[film->get_publisher_id()] += money;
 }
 
+vector<Customer*> Channel::sort_by_id(vector<Customer*> followers ,int followers_num)
+{
+   for (int i = 0; i < followers_num-1; i++)           
+       for (int j = 0; j < followers_num-i-1; j++)  
+           if (followers[j]->get_id() > followers[j+1]->get_id()) 
+              swap(followers[j], followers[j+1]); 
+    return followers;
+}
+
+void Channel::print_followers_info(std::vector<Customer*> followers)
+{
+    cout <<"List of Followers" <<endl;
+    cout << "#. User Id | User Username | User Email" <<endl;
+    for(int i = 0; i < followers.size(); i++)
+    {
+        cout <<i+1 <<". " ;
+        followers[i]->print_info();
+        cout <<endl;
+    }
+}
+
 void Channel::do_primitive_commands()
 {
     if(command_elements["order_type"] == "POST")
@@ -156,8 +177,7 @@ void Channel::do_primitive_commands()
         else
             throw NotFound();
     }
-    else    customer = customer_list.back();
-
+    else
         throw BadRequest();
 }
 
@@ -273,6 +293,16 @@ void Channel::comment_on_the_film()
     film->add_comment_to_film(command_elements["content"], customer->get_id());
     send_commenting_massage(film);
     cout <<"OK" <<endl;
+}
+
+void Channel::show_followers()
+{
+    if(customer->get_type() == "customer")
+        throw PermissionDenied();
+    vector<int> followers_id = customer->get_followers();
+    vector<Customer*> followers = find_followers(followers_id);
+    followers = sort_by_id(followers, followers.size());
+    print_followers_info(followers);
 }
 
 void Channel::do_post_command()

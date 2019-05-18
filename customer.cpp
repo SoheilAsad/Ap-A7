@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "exception.h"
 
@@ -63,4 +64,9 @@ void Customer::pay_money(int price)
     if(money < price)
         throw PermissionDenied();
     money -= price ;
+}
+
+void Customer::print_info()
+{
+    cout <<id <<" | " <<username <<" | " <<email ;
 }

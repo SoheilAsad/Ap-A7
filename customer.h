@@ -19,6 +19,7 @@ public:
     virtual void add_customer_to_followers(int follower_id);
     virtual std::vector<int> get_followers();
     void pay_money(int price);
+    void print_info();
 protected:
     int id;
     std::string username;
