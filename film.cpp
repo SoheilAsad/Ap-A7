@@ -15,13 +15,22 @@ Film::Film(int _id, map<string,string> command_elements, int _publisher_id)
 {
     id = _id;
     year = stoi(command_elements["year"]);
+    name = command_elements["name"];
     length = stoi(command_elements["length"]);
     price = stoi(command_elements["price"]);
+    rates.insert(pair<int,int>(0,0));
+    raters_id.push_back(0);
     summary = command_elements["summary"];
     director = command_elements["director"];
     publisher_id = _publisher_id;
     film_state = "on";
     comment_num = 1;
+}
+
+Film::~Film()
+{
+    for(int i = 0; i < comments_list.size(); i++)
+        delete comments_list[i];
 }
 
 int Film::get_id()
@@ -63,14 +72,22 @@ int Film::get_publisher_id()
     return publisher_id;
 }
 
+float make_two_decimal_places(float num)
+{
+    float value = (int)(num * 100 ); 
+    return (float)value / 100;
+}
+
 float Film::get_rate()
 {
     float rate = 0;
-    for(int i = 0; i < raters_id.size(); i++ )
+    for(int i = 0; i < rates.size(); i++)
         rate += rates[raters_id[i]];
-    rate = rate / raters_id.size();
-    float value = (int)(rate * 100 ); 
-    rate = (float)value / 100; 
+    if(raters_id.size() != 1)
+        rate = rate / (raters_id.size()-1); 
+    else
+        rate = rate / raters_id.size();
+    rate = make_two_decimal_places(rate);
     return rate;
 }
 

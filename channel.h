@@ -11,7 +11,9 @@ class Film;
 class Channel
 {
 public:
-    Channel();
+    Channel(CommandHandeler* _command_handeler);
+    ~Channel();
+    void set_command_elements(std::map<std::string,std::string> _command_elements);
     void singup_customer();
     void login_customer();
     bool is_username_used(std::string username);
@@ -23,9 +25,7 @@ public:
     void send_reply_massage(int writer_id);
     void send_publishing_massage_to_followers();
     void send_following_massage(int publisher_id);
-    void send_buying_massage_to_publisher(Film* film);
-    void send_ratiing_massage(Film* film);
-    void send_commenting_massage(Film* film);
+    void send_massage_to_publisher(Film* film, std::string massage_type);
     std::vector<Customer*> find_followers(std::vector<int> followers_id);
     void add_money_to_channel(Film* film);
     int calculate_publisher_share(int price, float rate);

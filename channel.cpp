@@ -10,19 +10,37 @@
 #include "film.h"
 #include "command_handeler.h"
 
-
 using namespace std;
 
-Channel::Channel()
+const string BUYING_MASSAGE = " buy your film ";
+const string RATING_MASSAGE = " rate your film ";
+const string COMMENTING_MASSAGE = " comment on your film ";
+
+Channel::Channel(CommandHandeler* _command_handeler)
 {
     customer_num = 1;
     film_num = 1;
+    command_handeler = _command_handeler;
+}
+
+Channel::~Channel()
+{
+    for(int i = 0; i < customer_list.size(); i++)
+        delete customer_list[i];
+    for(int i = 0; i < film_list.size(); i++)
+        delete film_list[i];
+    delete command_handeler;
+}
+
+void Channel::set_command_elements(map<string,string> _command_elements)
+{
+    command_elements = _command_elements;
 }
 
 bool Channel::is_username_used(std::string username)
 {
     for(int i = 0; i < customer_list.size(); i++)
-        if(customer_list[i]->get_name() == command_elements["username"]);
+        if(customer_list[i]->get_name() == command_elements["username"])
             return true;
     return false;
 }
@@ -38,7 +56,7 @@ Customer* Channel::find_customer_to_login()
 
 bool Channel::is_customer_a_publisher()
 {
-    if(command_elements.count("username"))
+    if(command_elements["publisher"] == "true")
 		return true;
     return false;
 }
@@ -102,28 +120,10 @@ void Channel::send_following_massage(int publisher_id)
     publisher->add_massage_to_new_massages(massage);
 }
 
-void Channel::send_buying_massage_to_publisher(Film* film)
+void Channel::send_massage_to_publisher(Film* film,string massage_type)
 {
     string massage;
-    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " buy your film "
-        + film->get_name() + " with id " + to_string(film->get_id()) + ".";
-    Customer* publisher = find_customer(film->get_publisher_id());
-    publisher->add_massage_to_new_massages(massage);
-}
-
-void Channel::send_ratiing_massage(Film* film)
-{
-    string massage;
-    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " rate your film "
-        + film->get_name() + " with id " + to_string(film->get_id()) + ".";
-    Customer* publisher = find_customer(film->get_publisher_id());
-    publisher->add_massage_to_new_massages(massage);
-}
-
-void Channel::send_commenting_massage(Film* film)
-{
-    string massage;
-    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " comment on your film "
+    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + massage_type
         + film->get_name() + " with id " + to_string(film->get_id()) + ".";
     Customer* publisher = find_customer(film->get_publisher_id());
     publisher->add_massage_to_new_massages(massage);
@@ -168,7 +168,7 @@ void Channel::print_followers_info(std::vector<Customer*> followers)
 
 void Channel::print_films_info(vector<Film*> publisher_films)
 {
-    cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Directoe" <<endl;
+    cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director" <<endl;
     for(int i = 0; i < publisher_films.size(); i++)
     {
         cout <<i+1 <<". " ;
@@ -206,7 +206,8 @@ vector<Film*> Channel::find_publisher_films(int publisher_id)
 
 vector<Film*> Channel::sort_film_by_id(vector<Film*> publisher_films)
 {
-    for (int i = 0; i < publisher_films.size()-1; i++)           
+    int size = publisher_films.size();
+    for (int i = 0; i < size-1; i++)
        for (int j = 0; j < publisher_films.size()-i-1; j++)  
             if (publisher_films[j]->get_id() > publisher_films[j+1]->get_id()) 
                 swap(publisher_films[j], publisher_films[j+1]); 
@@ -217,7 +218,7 @@ vector<Film*> Channel::filter_films_by_name(vector<Film*> publisher_films)
 {
     vector<Film*> sorted_films;
     for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_name == command_elements["name"])
+        if(publisher_films[i]->get_name() == command_elements["name"])
             sorted_films.push_back(publisher_films[i]);
     return sorted_films;
 }
@@ -303,8 +304,21 @@ vector<Film*> Channel::find_top_films()
 {
     vector<Film*> films = sort_film_by_rate(find_films_are_on());
     vector<Film*> top_films;
-    for(int i = films.size()-1 ; i > films.size()-5 ; i--)
-        top_films.push_back(films[i]);
+    int size = films.size() ;
+    if(size > 3)
+        for(int i = size-1 ; i > size-5 ; i--)
+        {
+            if(films[i]->get_id() != stoi(command_elements["film_id"]) && 
+                !films[i]->is_customer_buyed_film_before(customer->get_id()))
+                top_films.push_back(films[i]);
+        }
+    else
+        for(int i = size-1 ; i >= 0 ; i--)
+        {
+            if(films[i]->get_id() != stoi(command_elements["film_id"]) && 
+                !films[i]->is_customer_buyed_film_before(customer->get_id()))
+                top_films.push_back(films[i]);
+        }
     return top_films;
 }
 
@@ -321,25 +335,11 @@ void Channel::show_recommendation_films()
     }
 }
 
-void Channel::do_primitive_commands()
-{
-    if(command_elements["order_type"] == "POST")
-    {
-        if(command_elements["order"] == "singup?")
-            singup_customer();
-        else if(command_elements["order"] == "login?")
-            login_customer();
-        else
-            throw NotFound();
-    }
-    else
-        throw BadRequest();
-}
-
 void Channel::singup_customer()
 {
     if(is_username_used(command_elements["username"]))
-        throw BadRequest();
+         throw BadRequest();
+       
     command_handeler->check_singup_syntax_correction();
     if(is_customer_a_publisher())
     {
@@ -360,6 +360,21 @@ void Channel::login_customer()
     if(customer == NULL)
         throw BadRequest();
     cout << "OK" <<endl;
+}
+
+void Channel::do_primitive_commands()
+{
+    if(command_elements["order_type"] == "POST")
+    {
+        if(command_elements["order"] == "signup?")
+            singup_customer();
+        else if(command_elements["order"] == "login?")
+            login_customer();
+        else
+            throw PermissionDenied();
+    }
+    else
+        throw BadRequest();
 }
 
 void Channel::publish_the_film()
@@ -426,8 +441,9 @@ void Channel::buy_the_film()
         customer->pay_money(film->get_price());
         add_money_to_channel(film);
         film->add_customer_to_buyer(customer->get_id());
-        send_buying_massage_to_publisher(film);
+        send_massage_to_publisher(film,BUYING_MASSAGE);
     }
+    cout <<"OK" <<endl;
 }
 
 void Channel::rate_to_film()
@@ -436,8 +452,10 @@ void Channel::rate_to_film()
     Film* film = find_film(stoi(command_elements["film_id"]));
     if(film == NULL)
         throw NotFound();
+    if(!film->is_customer_buyed_film_before(customer->get_id()))
+        throw PermissionDenied();
     film->record_rate(customer->get_id(),stoi(command_elements["score"]));
-    send_ratiing_massage(film);
+    send_massage_to_publisher(film,RATING_MASSAGE);
     cout <<"OK" <<endl;
 }
 
@@ -447,8 +465,10 @@ void Channel::comment_on_the_film()
     Film* film = find_film(stoi(command_elements["film_id"]));
     if(film == NULL)
         throw NotFound();
+    if(!film->is_customer_buyed_film_before(customer->get_id()))
+        throw PermissionDenied();
     film->add_comment_to_film(command_elements["content"], customer->get_id());
-    send_commenting_massage(film);
+    send_massage_to_publisher(film,COMMENTING_MASSAGE);
     cout <<"OK" <<endl;
 }
 
@@ -476,7 +496,7 @@ void Channel::search_in_films()
 {
     command_handeler->check_show_publisher_films_syntax_correction();
     vector<Film*>films = find_films_are_on();
-    vector<Film*>films = filter_films_list(films);
+    films = filter_films_list(films);
     print_films_info(films);
 }
 
@@ -494,7 +514,7 @@ void Channel::show_customer_purchased_films()
 {
     command_handeler->check_show_publisher_films_syntax_correction();
     vector<Film*>films = find_customer_buyed_films();
-    vector<Film*>films = filter_films_list(films);
+    films = filter_films_list(films);
     print_films_info(films);
 }
 
@@ -554,7 +574,11 @@ void Channel::edit_film_info()
 
 void Channel::do_post_command()
 {
-    if(command_elements["order"] == "film?")
+    if(command_elements["order"] == "signup?")
+        singup_customer();
+    else if(command_elements["order"] == "login?")
+        login_customer();
+    else if(command_elements["order"] == "films?")
         publish_the_film();
     else if(command_elements["order"] == "money")
         give_money_to_publisher();
@@ -578,16 +602,16 @@ void Channel::do_get_command()
 {
     if(command_elements["order"] == "followers")
         show_followers();
-    else if(command_elements["order"] == "published?")
+    else if(command_elements["order"] == "published" || command_elements["order"] == "published?")
         show_publisher_films();
-    else if(command_elements["order"] == "film?")
+    else if(command_elements["order"] == "films?" || command_elements["order"] == "films")
     {
         if(is_id_in_command_elements())
             show_film_details();
         else
             search_in_films();
     }
-    else if(command_elements["order"] == "purchased?")
+    else if(command_elements["order"] == "purchased?" || command_elements["order"] == "purchased")
         show_customer_purchased_films();
     else if(command_elements["order"] == "notifications")
         show_massages();

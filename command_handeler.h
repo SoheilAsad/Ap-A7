@@ -9,6 +9,7 @@ class CommandHandeler
 public:
     CommandHandeler();
     void read_line();
+    void clear_the_map();
     void separate_words_in_line(std::string all_line);
     void split_up_in_space_place(std::string& all_words, int space_place);
     void separate_command_elements();

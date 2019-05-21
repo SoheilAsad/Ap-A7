@@ -9,7 +9,6 @@ class Customer
 {
 public:
     Customer(std::map<std::string,std::string>& command_elements, int _id);
-
     std::string get_name();
     int get_password();
     virtual std::string get_type();

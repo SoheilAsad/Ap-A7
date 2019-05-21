@@ -1,9 +1,9 @@
 CC := g++ -std=c++11
 
-all: 1.out
+all: a.out
 
-1.out: main.o command_handeler.o exception.o channel.o publisher.o customer.o film.o comment.o
-	$(CC) main.o command_handeler.o exception.o channel.o publisher.o customer.o film.o comment.o -o 1.out
+a.out: main.o command_handeler.o exception.o channel.o publisher.o customer.o film.o comment.o
+	$(CC) main.o command_handeler.o exception.o channel.o publisher.o customer.o film.o comment.o -o a.out
 
 main.o: main.cpp command_handeler.h exception.h channel.h publisher.h customer.h film.h comment.h
 	$(CC) -c main.cpp 
