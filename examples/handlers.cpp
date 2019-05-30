@@ -93,3 +93,28 @@ Response* PublishHandler::callback(Request *req)
     res->setSessionId("SID");
     return res;
 }
+
+Response* ProfileHandler::callback(Request *req)
+{
+    Response *res = new Response;
+    res->setHeader("Content-Type", "text/html");
+    if(req->getQueryParam("amount") != "")
+        channel->increase_money(req->getQueryParam("amount"));
+    string body;
+    ifstream f("./static/profile");
+    if(f) {
+        ostringstream ss;
+        ss << f.rdbuf();
+        body = ss.str();
+    }
+    channel->get_buyed_films_info(&body);
+    body += "</table>\n";
+    body += "<h4>Your Credit : " + to_string(channel->get_user_money()) + "</h4>";
+    body += "<form action=\"/profile\" method=\"get\">\n";
+    body += "<input name=\"amount\" type=\"text\" placeholder=\"amount\" />";
+    body += "<button type=\"submit\" >add cretid</button>\n";
+    body += "</body>\n";
+    body += "</html>";
+    res->setBody(body);
+    return res;
+}

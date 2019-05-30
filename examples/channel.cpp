@@ -328,9 +328,24 @@ void Channel::get_another_films_info(string* body)
         {
             *body += "<tr>\n" ;
             film_list[i]->get_films_info(body);
-            *body += "<td> <a href=\"delete_film?id=" + to_string(film_list[i]->get_id()) + "\">delete</a> </td>\n" ;
             *body += "</tr>\n" ;
         }
+}
+
+void Channel::get_buyed_films_info(string* body)
+{
+    for(int i = 0; i < film_list.size(); i++)
+        if(!is_film_publisher(film_list[i]) && film_list[i]->is_customer_buyed_film_before(customer->get_id()))
+        {
+            *body += "<tr>\n" ;
+            film_list[i]->get_films_info(body);
+            *body += "</tr>\n" ;
+        }
+}
+
+int Channel::get_user_money()
+{
+    return customer->get_money();
 }
 
 vector<int> Channel::sort_film_by_graf(int film_id)
@@ -460,10 +475,9 @@ void Channel::follow_publisher()
     cout <<"OK" <<endl;
 }
 
-void Channel::increase_money()
+void Channel::increase_money(string amount)
 {
-    customer->increase_money(stoi(command_elements["amount"]));
-    cout <<"OK" <<endl;
+    customer->increase_money(stoi(amount));
 }
 
 void Channel::buy_the_film()
@@ -593,8 +607,6 @@ void Channel::do_post_command()
         reply_to_comment();
     else if(command_elements["order"] == "followers?")
         follow_publisher();
-    else if(command_elements["order"] == "money?")
-        increase_money();
     else if(command_elements["order"] == "buy?")
         buy_the_film();
     else if(command_elements["order"] == "rate?")

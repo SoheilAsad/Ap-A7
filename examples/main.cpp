@@ -21,7 +21,8 @@ int main(int argc, char **argv) {
         server.post("/login", new LoginHandler(channel));
         server.get("/publish", new ShowPage("static/publish.html"));
         server.post("/publish", new PublishHandler(channel));
-        
+        server.get("/profile", new ProfileHandler(channel));
+
         server.run();
     }catch (Server::Exception e) {
         cerr << e.getMessage() << endl;

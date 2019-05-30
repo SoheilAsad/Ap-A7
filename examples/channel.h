@@ -19,7 +19,9 @@ public:
     void get_publisher_films_info(std::string* body,std::string director);
     int get_user_id();
     void get_another_films_info(std::string* body);
+    void get_buyed_films_info(std::string* body);
     bool is_film_publisher(Film* film);
+    int get_user_money();
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();
@@ -63,7 +65,7 @@ public:
     void give_money_to_publisher();
     void reply_to_comment();
     void follow_publisher();
-    void increase_money();
+    void increase_money(std::string amount);
     void buy_the_film();
     void rate_to_film();
     void comment_on_the_film();

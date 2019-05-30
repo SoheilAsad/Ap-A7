@@ -37,4 +37,12 @@ private:
     Channel* channel;
 };
 
+class ProfileHandler : public RequestHandler {
+public:
+    ProfileHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif
