@@ -314,6 +314,25 @@ void Channel::get_publisher_films_info(string* body,string director)
     }
 }
 
+bool Channel::is_film_publisher(Film* film)
+{
+    if(film->get_publisher_id() == customer->get_id())
+        return true;
+    return false;
+}
+
+void Channel::get_another_films_info(string* body)
+{
+    for(int i = 0; i < film_list.size(); i++)
+        if(!is_film_publisher(film_list[i]))
+        {
+            *body += "<tr>\n" ;
+            film_list[i]->get_films_info(body);
+            *body += "<td> <a href=\"delete_film?id=" + to_string(film_list[i]->get_id()) + "\">delete</a> </td>\n" ;
+            *body += "</tr>\n" ;
+        }
+}
+
 vector<int> Channel::sort_film_by_graf(int film_id)
 {
     vector<int> graf_row ;

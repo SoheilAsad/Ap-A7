@@ -59,6 +59,18 @@ Response* PublisherHomeHandler::callback(Request *req)
     body += "<form action=\"/publish\" method=\"get\">\n";
     body += "<button type=\"submit\" >publish film</button>\n";
     body += "</form>\n";
+    body += "<h4>Films</h4>\n";
+    body += "<table id=\"t01\">\n";
+    body += "<tr>\n";
+    body += "<th>Name</th>\n";
+    body += "<th>Price</th>\n";
+    body += "<th>Year</th>\n";
+    body += "<th>Length</th>\n";
+    body += "<th>Rate</th>\n";
+    body += "<th>Director</th>\n";
+    body += "</tr>\n";
+    channel->get_another_films_info(&body);
+     body += "</table>\n";
     body += "</body>\n";
     body += "</html>";
     res->setBody(body);

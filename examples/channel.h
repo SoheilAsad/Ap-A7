@@ -18,6 +18,8 @@ public:
     bool is_username_used(std::string username);
     void get_publisher_films_info(std::string* body,std::string director);
     int get_user_id();
+    void get_another_films_info(std::string* body);
+    bool is_film_publisher(Film* film);
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();
