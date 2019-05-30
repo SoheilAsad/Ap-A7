@@ -420,13 +420,9 @@ void Channel::do_primitive_commands()
 
 void Channel::publish_the_film()
 {
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
     film_list.push_back(new Film(film_num,command_elements,customer->get_id()));
     add_film_to_graf();
-    send_publishing_massage_to_followers();
     film_num++;
-    cout << "OK" <<endl;
 }
 
 void Channel::give_money_to_publisher()
@@ -438,13 +434,7 @@ void Channel::give_money_to_publisher()
 
 void Channel::reply_to_comment()
 {
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
     Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    // if(film->get_publisher_id() != customer->get_id())
-    //     throw PermissionDenied();
     int writer_id = film->get_comment_writer_id(stoi(command_elements["comment_id"]));
     film->write_repley_in_comment_box(stoi(command_elements["comment_id"]),command_elements["content"]);
     send_reply_massage(writer_id);

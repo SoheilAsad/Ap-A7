@@ -9,8 +9,6 @@ using namespace std;
 Response *SignupHandler::callback(Request *req) {
     Response *res;
     map<string,string> command;
-    command["order_type"] = "POST";
-    command["order"] = "signup?";
     command["username"] = req->getBodyParam("username");
     command["password"] = req->getBodyParam("password");
     command["age"] = req->getBodyParam("age");
@@ -31,8 +29,6 @@ Response *SignupHandler::callback(Request *req) {
 Response *LoginHandler::callback(Request *req) {
     Response *res;
     map<string,string> command;
-    command["order_type"] = "POST";
-    command["order"] = "login?";
     command["username"] = req->getBodyParam("username");
     command["password"] = req->getBodyParam("password");
     channel->set_command_elements(command);
@@ -60,29 +56,28 @@ Response* PublisherHomeHandler::callback(Request *req)
     }
     channel->get_publisher_films_info(&body);
     body += "</table>\n";
+    body += "<form action=\"/publish\" method=\"get\">\n";
+    body += "<button type=\"submit\" >publish film</button>\n";
+    body += "</form>\n";
     body += "</body>\n";
     body += "</html>";
-    cerr <<body;
     res->setBody(body);
     return res;
 }
 
-
-// Response *UploadHandler::callback(Request *req) {
-//   string name = req->getBodyParam("file_name");
-//   string file = req->getBodyParam("file");
-//   cout << name << " (" << file.size() << "B):\n" << file << endl;
-//   Response *res = Response::redirect("/");
-//   return res;
-// }
-
-// ColorHandler::ColorHandler(string filePath) : TemplateHandler(filePath) {}
-
-// map<string, string> ColorHandler::handle(Request *req) {
-//   map<string, string> context;
-//   string newName = "I am " + req->getQueryParam("name");
-//   context["name"] = newName;
-//   context["color"] = req->getQueryParam("color");
-//   return context;
-// }
-
+Response* PublishHandler::callback(Request *req)
+{
+    Response *res;
+    map<string,string> command;
+    command["name"] = req->getBodyParam("name");
+    command["price"] = req->getBodyParam("price");
+    command["director"] = req->getBodyParam("director");
+    command["length"] = req->getBodyParam("length");
+    command["year"] = req->getBodyParam("year");
+    command["summary"] = req->getBodyParam("summary");
+    channel->set_command_elements(command);
+    channel->publish_the_film();
+    res = Response::redirect("/p_home");
+    res->setSessionId("SID");
+    return res;
+}

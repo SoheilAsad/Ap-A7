@@ -37,14 +37,35 @@ int Film::get_id()
     return id;
 }
 
+float make_two_decimal_places(float num)
+{
+    float value = (int)(num * 100 ); 
+    return (float)value / 100;
+}
+
+float Film::get_rate()
+{
+    float rate = 0;
+    for(int i = 0; i < rates.size(); i++)
+        rate += rates[raters_id[i]];
+    if(raters_id.size() != 1)
+        rate = rate / (raters_id.size()-1); 
+    else
+        rate = rate / raters_id.size();
+        cerr <<"rate" <<rate;
+    rate = make_two_decimal_places(rate);
+    cerr <<"rate" <<rate;
+    return rate;
+}
+
 void Film::get_films_info(string* body)
 {
-    *body += "<td>" + name + "<td\n>" ;
-    *body += "<td>" + to_string(price) + "<td\n>" ;
-    *body += "<td>" + to_string(year) + "<td\n>" ;
-    *body += "<td>" + to_string(length) + "<td\n>" ;
-    *body += "<td>" + to_string(get_rate()) + "<td\n>" ;
-    *body += "<td>" + director + "<td\n>" ;
+    *body += "<td>" + name + "</td>\n" ;
+    *body += "<td>" + to_string(price) + "</td>\n" ;
+    *body += "<td>" + to_string(year) + "</td>\n" ;
+    *body += "<td>" + to_string(length) + "</td>\n" ;
+    *body += "<td>" + to_string((int)get_rate()) + "</td>\n" ;
+    *body += "<td>" + director + "</td>\n" ;
 }
 
 Comment* Film::find_comment(int comment_id)
@@ -79,25 +100,6 @@ int Film::get_price()
 int Film::get_publisher_id()
 {
     return publisher_id;
-}
-
-float make_two_decimal_places(float num)
-{
-    float value = (int)(num * 100 ); 
-    return (float)value / 100;
-}
-
-float Film::get_rate()
-{
-    float rate = 0;
-    for(int i = 0; i < rates.size(); i++)
-        rate += rates[raters_id[i]];
-    if(raters_id.size() != 1)
-        rate = rate / (raters_id.size()-1); 
-    else
-        rate = rate / raters_id.size();
-    rate = make_two_decimal_places(rate);
-    return rate;
 }
 
 bool Film::is_customer_buyed_film_before(int customer_id)
