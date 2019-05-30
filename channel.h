@@ -11,8 +11,9 @@ class Film;
 class Channel
 {
 public:
-    Channel(CommandHandeler* _command_handeler);
+    Channel(CommandHandeler* _command_handeler, std::map<std::string,std::string> admin);
     ~Channel();
+    int get_channel_loop();
     void set_command_elements(std::map<std::string,std::string> _command_elements);
     void singup_customer();
     void login_customer();
@@ -34,12 +35,15 @@ public:
     std::vector<Film*> find_publisher_films(int publisher_id);
     std::vector<Film*> find_films_are_on();
     std::vector<Film*> find_customer_buyed_films();
-    void show_recommendation_films();
-    std::vector<Film*> find_top_films();
+    void show_recommendation_films(int film_id);
+    std::vector<Film*> find_best_film(int film_id);
+    void add_film_to_graf();
+    void update_films_graf(int film_id);
+    void erase_repetitious_film_id(std::vector<int> &films, int film_id);
     
     std::vector<Customer*> sort_by_id(std::vector<Customer*> followers, int followers_num);
     std::vector<Film*> sort_film_by_id(std::vector<Film*> publisher_films);
-    std::vector<Film*> sort_film_by_rate(std::vector<Film*> publisher_films);
+    std::vector<int> sort_film_by_graf(int film_id);
     std::vector<Film*> filter_films_list(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_name(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_min_rate(std::vector<Film*> publisher_films);
@@ -52,8 +56,6 @@ public:
     void do_command();
     void do_post_command();
     void do_get_command();
-    void do_delete_command();
-    void do_put_command();
     void publish_the_film();
     void give_money_to_publisher();
     void reply_to_comment();
@@ -71,6 +73,8 @@ public:
     void delete_film();
     void delete_comment();
     void edit_film_info();
+    void logout();
+    void show_money();
 
 private:
     std::map<std::string,std::string> command_elements;
@@ -79,8 +83,10 @@ private:
     std::vector<Film*> film_list;
     CommandHandeler* command_handeler;
     std::map<int,int> publishers_money;
+    std::vector< std::vector<int> > films_graf;
     int customer_num;
     int film_num;
+    int channel_loop;
 
 };
 

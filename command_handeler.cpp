@@ -87,7 +87,7 @@ std::map<std::string,std::string> CommandHandeler::get_command()
 
 void CommandHandeler::check_singup_syntax_correction()
 {
-	if(!command_elements.count("username"))
+	if(!command_elements.count("username") || !command_elements.count("password"))
 		throw BadRequest();
 
 	const regex pattern
@@ -97,7 +97,6 @@ void CommandHandeler::check_singup_syntax_correction()
         
 
 	try{
-        stoi(command_elements["password"]);
 		stoi(command_elements["age"]);
     }catch(exception ex){
         throw BadRequest();
@@ -108,14 +107,8 @@ void CommandHandeler::check_login_syntax_correction()
 	if(command_elements.size() != 4)
 		throw BadRequest();
 
-	if(!command_elements.count("username"))
+	if(!command_elements.count("username") || !command_elements.count("password"))
 		throw BadRequest();
-
-	try{
-        stoi(command_elements["password"]);
-    }catch(exception ex){
-        throw BadRequest();
-    }
 }
 
 void CommandHandeler::check_film_publishing_syntax_correction()

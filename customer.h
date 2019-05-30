@@ -10,9 +10,10 @@ class Customer
 public:
     Customer(std::map<std::string,std::string>& command_elements, int _id);
     std::string get_name();
-    int get_password();
+    std::string get_password();
     virtual std::string get_type();
     int get_id();
+    int get_money();
     void increase_money(int amout);
     void add_massage_to_new_massages(std::string massage);
     virtual void add_customer_to_followers(int follower_id);
@@ -25,7 +26,7 @@ public:
 protected:
     int id;
     std::string username;
-    int password;
+    std::string password;
     std::string email;
     int age;
     std::vector<std::string> new_massages;

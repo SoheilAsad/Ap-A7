@@ -14,7 +14,7 @@ Customer::Customer(map<string,string>& command_elements, int _id)
 {
     id = _id ;
     username = command_elements["username"];
-    password = stoi(command_elements["password"]);
+    password = command_elements["password"];
     email = command_elements["email"];
     age = stoi(command_elements["age"]);
     money = 0;
@@ -25,7 +25,7 @@ string Customer::get_name()
     return username;
 }
 
-int Customer::get_password()
+string Customer::get_password()
 {
     return password;
 }
@@ -38,6 +38,11 @@ string Customer::get_type()
 int Customer::get_id()
 {
     return id;
+}
+
+int Customer::get_money()
+{
+    return money;
 }
 
 void Customer::increase_money(int amout)
