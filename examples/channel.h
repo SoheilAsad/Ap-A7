@@ -16,6 +16,7 @@ public:
     void singup_customer();
     void login_customer();
     bool is_username_used(std::string username);
+    void get_publisher_films_info(std::string* body);
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();

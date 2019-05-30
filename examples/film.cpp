@@ -37,6 +37,16 @@ int Film::get_id()
     return id;
 }
 
+void Film::get_films_info(string* body)
+{
+    *body += "<td>" + name + "<td\n>" ;
+    *body += "<td>" + to_string(price) + "<td\n>" ;
+    *body += "<td>" + to_string(year) + "<td\n>" ;
+    *body += "<td>" + to_string(length) + "<td\n>" ;
+    *body += "<td>" + to_string(get_rate()) + "<td\n>" ;
+    *body += "<td>" + director + "<td\n>" ;
+}
+
 Comment* Film::find_comment(int comment_id)
 {
     for(int i = 0; i < comments_list.size(); i++)

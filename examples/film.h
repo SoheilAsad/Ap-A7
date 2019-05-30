@@ -12,6 +12,7 @@ class Film
 public:
     Film(int _id, std::map<std::string,std::string> command_elements, int _publisher_id);
     ~Film();
+    void get_films_info(std::string* body);
     int get_id();
     int get_comment_writer_id(int comment_id);
     Comment* find_comment(int comment_id);

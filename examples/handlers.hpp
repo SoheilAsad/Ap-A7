@@ -21,4 +21,12 @@ private:
     Channel* channel;
 };
 
+class PublisherHomeHandler : public RequestHandler {
+public:
+    PublisherHomeHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif

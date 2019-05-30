@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     server.get("/signup", new ShowPage("static/signup.html"));
     server.post("/signup", new SignupHandler(channel));
     server.get("/c_home", new ShowPage("static/customer_home.html"));
-    server.get("/p_home", new ShowPage("static/publisher_home.html"));
+    server.get("/p_home", new PublisherHomeHandler(channel));
     server.get("/login", new ShowPage("static/login.html"));
     server.post("/login", new LoginHandler(channel));
     // server.get("/up", new ShowPage("static/upload_form.html"));

@@ -294,6 +294,18 @@ vector<Film*> Channel::filter_films_by_director(vector<Film*> publisher_films)
     return sorted_films;
 }
 
+void Channel::get_publisher_films_info(string* body)
+{
+    vector<Film*> films = find_publisher_films(customer->get_id());
+    for (int i = 0; i < films.size(); i++)
+    {
+        *body += "<tr>\n" ;
+        films[i]->get_films_info(body);
+        *body += "<td> <a href=\"delete_film?id=" + to_string(films[i]->get_id()) + "\">delete</a> </td>\n" ;
+        *body += "</tr>\n" ;
+    }
+}
+
 vector<Film*> Channel::filter_films_list(vector<Film*> publisher_films)
 {
     publisher_films = sort_film_by_id(publisher_films);
