@@ -37,7 +37,7 @@ void Channel::set_command_elements(map<string,string> _command_elements)
 bool Channel::is_username_used(std::string username)
 {
     for(int i = 0; i < customer_list.size(); i++)
-        if(customer_list[i]->get_name() == command_elements["username"])
+        if(customer_list[i]->get_name() == username)
             return true;
     return false;
 }
