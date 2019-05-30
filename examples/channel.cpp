@@ -34,6 +34,11 @@ void Channel::set_command_elements(map<string,string> _command_elements)
     command_elements = _command_elements;
 }
 
+int Channel::get_user_id()
+{
+    return customer->get_id();
+}
+
 bool Channel::is_username_used(std::string username)
 {
     for(int i = 0; i < customer_list.size(); i++)
@@ -285,18 +290,21 @@ vector<Film*> Channel::filter_films_by_max_year(vector<Film*> publisher_films)
     return sorted_films;
 }
 
-vector<Film*> Channel::filter_films_by_director(vector<Film*> publisher_films)
+vector<Film*> Channel::filter_films_by_director(vector<Film*> publisher_films, string director)
 {
     vector<Film*> sorted_films;
     for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_director_name() == command_elements["director"])
+        if(publisher_films[i]->get_director_name() == director)
             sorted_films.push_back(publisher_films[i]);
     return sorted_films;
 }
 
-void Channel::get_publisher_films_info(string* body)
+void Channel::get_publisher_films_info(string* body,string director)
 {
     vector<Film*> films = find_publisher_films(customer->get_id());
+    if(director != "")
+        films = filter_films_by_director(films,director);
+    films = sort_film_by_id(films);
     for (int i = 0; i < films.size(); i++)
     {
         *body += "<tr>\n" ;
@@ -304,24 +312,6 @@ void Channel::get_publisher_films_info(string* body)
         *body += "<td> <a href=\"delete_film?id=" + to_string(films[i]->get_id()) + "\">delete</a> </td>\n" ;
         *body += "</tr>\n" ;
     }
-}
-
-vector<Film*> Channel::filter_films_list(vector<Film*> publisher_films)
-{
-    publisher_films = sort_film_by_id(publisher_films);
-    if(command_elements.count("name"))
-        publisher_films = filter_films_by_name(publisher_films);
-    if(command_elements.count("min_rate"))
-        publisher_films = filter_films_by_min_rate(publisher_films);
-    if(command_elements.count("min_year"))
-        publisher_films = filter_films_by_min_year(publisher_films);
-    if(command_elements.count("price"))
-        publisher_films = filter_films_by_price(publisher_films);
-    if(command_elements.count("max_year"))
-        publisher_films = filter_films_by_max_year(publisher_films);
-    if(command_elements.count("director"))
-        publisher_films = filter_films_by_director(publisher_films);
-    return publisher_films;
 }
 
 vector<int> Channel::sort_film_by_graf(int film_id)
@@ -499,31 +489,6 @@ void Channel::comment_on_the_film()
     cout <<"OK" <<endl;
 }
 
-void Channel::show_followers()
-{
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
-    vector<int> followers_id = customer->get_followers();
-    vector<Customer*> followers = find_followers(followers_id);
-    followers = sort_by_id(followers, followers.size());
-    print_followers_info(followers);
-}
-
-void Channel::show_publisher_films()
-{
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
-    vector<Film*> publisher_films = find_publisher_films(customer->get_id());
-    publisher_films = filter_films_list(publisher_films);
-    print_films_info(publisher_films);
-}
-
-void Channel::search_in_films()
-{
-    vector<Film*>films = find_films_are_on();
-    films = filter_films_list(films);
-    print_films_info(films);
-}
 
 void Channel::show_film_details()
 {
@@ -537,7 +502,6 @@ void Channel::show_film_details()
 void Channel::show_customer_purchased_films()
 {
     vector<Film*>films = find_customer_buyed_films();
-    films = filter_films_list(films);
     print_films_info(films);
 }
 
@@ -624,16 +588,10 @@ void Channel::do_post_command()
 
 void Channel::do_get_command()
 {
-    if(command_elements["order"] == "followers")
-        show_followers();
-    else if(command_elements["order"] == "published" || command_elements["order"] == "published?")
-        show_publisher_films();
-    else if(command_elements["order"] == "films?" || command_elements["order"] == "films")
+    if(command_elements["order"] == "films?" || command_elements["order"] == "films")
     {
         if(is_id_in_command_elements())
             show_film_details();
-        else
-            search_in_films();
     }
     else if(command_elements["order"] == "purchased?" || command_elements["order"] == "purchased")
         show_customer_purchased_films();

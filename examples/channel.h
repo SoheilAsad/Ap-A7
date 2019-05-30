@@ -16,7 +16,8 @@ public:
     void singup_customer();
     void login_customer();
     bool is_username_used(std::string username);
-    void get_publisher_films_info(std::string* body);
+    void get_publisher_films_info(std::string* body,std::string director);
+    int get_user_id();
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();
@@ -45,13 +46,12 @@ public:
     std::vector<Customer*> sort_by_id(std::vector<Customer*> followers, int followers_num);
     std::vector<Film*> sort_film_by_id(std::vector<Film*> publisher_films);
     std::vector<int> sort_film_by_graf(int film_id);
-    std::vector<Film*> filter_films_list(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_name(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_min_rate(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_min_year(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_price(std::vector<Film*> publisher_films);
     std::vector<Film*> filter_films_by_max_year(std::vector<Film*> publisher_films);
-    std::vector<Film*> filter_films_by_director(std::vector<Film*> publisher_films);
+    std::vector<Film*> filter_films_by_director(std::vector<Film*> publisher_films,std::string director);
     
     void do_primitive_commands();
     void do_command();

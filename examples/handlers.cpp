@@ -22,7 +22,7 @@ Response *SignupHandler::callback(Request *req) {
         res = Response::redirect("/p_home");
     else 
         res = Response::redirect("/c_home");
-    res->setSessionId("SID");
+    res->setSessionId(to_string(channel->get_user_id()));
     return res;
 }
 
@@ -39,7 +39,7 @@ Response *LoginHandler::callback(Request *req) {
         res = Response::redirect("/p_home");
     else 
         res = Response::redirect("/c_home");
-    res->setSessionId("SID");
+    res->setSessionId(to_string(channel->get_user_id()));
     return res;
 }
 
@@ -54,7 +54,7 @@ Response* PublisherHomeHandler::callback(Request *req)
         ss << f.rdbuf();
         body = ss.str();
     }
-    channel->get_publisher_films_info(&body);
+    channel->get_publisher_films_info(&body,req->getQueryParam("director"));
     body += "</table>\n";
     body += "<form action=\"/publish\" method=\"get\">\n";
     body += "<button type=\"submit\" >publish film</button>\n";

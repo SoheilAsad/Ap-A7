@@ -52,9 +52,7 @@ float Film::get_rate()
         rate = rate / (raters_id.size()-1); 
     else
         rate = rate / raters_id.size();
-        cerr <<"rate" <<rate;
     rate = make_two_decimal_places(rate);
-    cerr <<"rate" <<rate;
     return rate;
 }
 
