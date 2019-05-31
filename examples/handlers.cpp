@@ -90,7 +90,6 @@ Response* PublishHandler::callback(Request *req)
     channel->set_command_elements(command);
     channel->publish_the_film();
     res = Response::redirect("/p_home");
-    res->setSessionId("SID");
     return res;
 }
 
@@ -116,5 +115,14 @@ Response* ProfileHandler::callback(Request *req)
     body += "</body>\n";
     body += "</html>";
     res->setBody(body);
+    return res;
+}
+
+Response* DeleteHandler::callback(Request *req)
+{
+    Response *res;
+    int film_id = stoi(req->getQueryParam("id"));
+    channel->delete_film(film_id);
+    res = Response::redirect("/p_home");
     return res;
 }

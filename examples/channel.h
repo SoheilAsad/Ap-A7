@@ -75,7 +75,7 @@ public:
     void show_film_details();
     void show_customer_purchased_films();
     void show_massages();
-    void delete_film();
+    void delete_film(int film_id);
     void delete_comment();
     void edit_film_info();
     void show_money();

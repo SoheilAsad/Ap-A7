@@ -45,4 +45,12 @@ private:
     Channel* channel;
 };
 
+class DeleteHandler : public RequestHandler {
+public:
+    DeleteHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif

@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
         server.get("/publish", new ShowPage("static/publish.html"));
         server.post("/publish", new PublishHandler(channel));
         server.get("/profile", new ProfileHandler(channel));
+        server.post("/delete", new DeleteHandler(channel));
 
         server.run();
     }catch (Server::Exception e) {

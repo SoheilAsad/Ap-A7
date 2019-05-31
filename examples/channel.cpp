@@ -309,7 +309,9 @@ void Channel::get_publisher_films_info(string* body,string director)
     {
         *body += "<tr>\n" ;
         films[i]->get_films_info(body);
-        *body += "<td> <a href=\"delete_film?id=" + to_string(films[i]->get_id()) + "\">delete</a> </td>\n" ;
+        *body += "<td> <form action=\"delete?id=" +to_string(films[i]->get_id()) + "\" method=\"post\"> ";
+        *body += "<button type=\"submit\">delete</button> ";
+        *body += "</form> </td>\n";
         *body += "</tr>\n" ;
     }
 }
@@ -323,11 +325,12 @@ bool Channel::is_film_publisher(Film* film)
 
 void Channel::get_another_films_info(string* body)
 {
-    for(int i = 0; i < film_list.size(); i++)
-        if(!is_film_publisher(film_list[i]))
+    vector<Film*> films = find_films_are_on();
+    for(int i = 0; i < films.size(); i++)
+        if(!is_film_publisher(films[i]))
         {
             *body += "<tr>\n" ;
-            film_list[i]->get_films_info(body);
+            films[i]->get_films_info(body);
             *body += "</tr>\n" ;
         }
 }
@@ -549,15 +552,10 @@ void Channel::show_massages()
         customer->show_readed_massages(stoi(command_elements["limit"]));
 }
 
-void Channel::delete_film()
+void Channel::delete_film(int film_id)
 {
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
+    Film* film = find_film(film_id);
     film->delete_film();
-    cout <<"OK" <<endl;
 }
 
 void Channel::delete_comment()
@@ -593,9 +591,7 @@ void Channel::show_money()
 
 void Channel::do_post_command()
 {
-    if(command_elements["order"] == "delete_films?")
-        delete_film();
-    else if(command_elements["order"] == "delete_comments?")
+    if(command_elements["order"] == "delete_comments?")
         delete_comment();
     else if(command_elements["order"] == "put_films?")
         edit_film_info();
