@@ -171,18 +171,26 @@ void Film::show_comments()
         comments_list[i]->show_info();
 }
 
-void Film::show_details()
+void Film::get_details(string* body)
 {
-    cout <<"Details of Film " <<name <<endl;
-    cout <<"Id = " <<id <<endl;
-    cout <<"Director = " <<director <<endl;
-    cout <<"Length = " <<length <<endl;
-    cout <<"Year = " <<year <<endl;
-    cout <<"Summary = " <<summary <<endl;
-    cout <<"Rate = " <<get_rate() <<endl;
-    cout <<"Price = " <<price <<endl <<endl;
-    show_comments();
-    cout <<endl;
+    *body += "<ul>\n";
+    *body += "<li>Name : " + name + "</li>\n" ;
+    *body += "<li>Length : " + to_string(length) + "</li>\n" ;
+    *body += "<li>Price : " + to_string(price) + "</li>\n" ;
+    *body += "<li>Rate : " + to_string((int)get_rate()) + "</li>\n" ;
+    *body += "<li>Year : " + to_string(year) + "</li>\n" ;
+    *body += "<li>Director : " + director + "</li>\n" ;
+    *body += "<li>Summary : " + summary + "</li>\n" ;
+    *body += "</ul>\n";
+
+    *body += "<h4>comments : </h4>";
+    if(comments_list.size() != 0)
+    {
+        *body += "<ol>\n";
+        for(int i = 0; i < comments_list.size(); i++)
+            *body += "<li>" + comments_list[i]->get_content() + "</li>\n" ;
+        *body += "</ol>\n";
+    }
 }
 
 void Film::print_berif_info()

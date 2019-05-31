@@ -53,4 +53,12 @@ private:
     Channel* channel;
 };
 
+class DetailHandler : public RequestHandler {
+public:
+    DetailHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif

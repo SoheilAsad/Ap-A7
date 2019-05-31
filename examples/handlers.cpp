@@ -126,3 +126,19 @@ Response* DeleteHandler::callback(Request *req)
     res = Response::redirect("/p_home");
     return res;
 }
+
+Response* DetailHandler::callback(Request *req)
+{
+     Response *res = new Response;
+    res->setHeader("Content-Type", "text/html");
+    string body;
+    body += "<!DOCTYPE html>\n";
+    body += "<html>\n";
+    body += "<body>\n";
+    body += "<h2>Film Details</h2>\n";
+    channel->get_film_details(stoi(req->getQueryParam("id")),&body);
+    body += "</body>\n";
+    body += "</html>\n";
+    res->setBody(body);
+    return res;
+}

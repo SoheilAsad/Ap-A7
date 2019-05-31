@@ -9,6 +9,7 @@ class Comment
 public:
     Comment(int _id, std::string _content, int _customer_id);
 
+    std::string get_content();
     int get_writer_id();
     int get_id();
     void write_repley(std::string _content);

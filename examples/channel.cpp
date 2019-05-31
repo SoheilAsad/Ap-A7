@@ -309,8 +309,12 @@ void Channel::get_publisher_films_info(string* body,string director)
     {
         *body += "<tr>\n" ;
         films[i]->get_films_info(body);
-        *body += "<td> <form action=\"delete?id=" +to_string(films[i]->get_id()) + "\" method=\"post\"> ";
-        *body += "<button type=\"submit\">delete</button> ";
+        *body += "<td> <form action=\"delete?id=" +to_string(films[i]->get_id()) + "\" method=\"post\">\n";
+        *body += "<button type=\"submit\">delete</button>\n";
+        *body += "</form> \n";
+        *body += "<form action=\"detail\" method=\"get\">\n";
+        *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
+        *body += "<button type=\"submit\">details</button>\n";
         *body += "</form> </td>\n";
         *body += "</tr>\n" ;
     }
@@ -331,6 +335,10 @@ void Channel::get_another_films_info(string* body)
         {
             *body += "<tr>\n" ;
             films[i]->get_films_info(body);
+            *body += "<td> <form action=\"detail\" method=\"get\">\n";
+            *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
+            *body += "<button type=\"submit\">details</button>\n";
+            *body += "</form> </td>\n";
             *body += "</tr>\n" ;
         }
 }
@@ -342,6 +350,10 @@ void Channel::get_buyed_films_info(string* body)
         {
             *body += "<tr>\n" ;
             film_list[i]->get_films_info(body);
+            *body += "<td> <form action=\"detail\" method=\"get\">\n";
+            *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(film_list[i]->get_id()) + ">";
+            *body += "<button type=\"submit\">details</button>\n";
+            *body += "</form> </td>\n";
             *body += "</tr>\n" ;
         }
 }
@@ -526,13 +538,10 @@ void Channel::comment_on_the_film()
 }
 
 
-void Channel::show_film_details()
+void Channel::get_film_details(int film_id,string* body)
 {
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    film->show_details();
-    show_recommendation_films(film->get_id());
+    Film* film = find_film(film_id);
+    film->get_details(body);
 }
 
 void Channel::show_customer_purchased_films()
@@ -615,12 +624,7 @@ void Channel::do_post_command()
 
 void Channel::do_get_command()
 {
-    if(command_elements["order"] == "films?" || command_elements["order"] == "films")
-    {
-        if(is_id_in_command_elements())
-            show_film_details();
-    }
-    else if(command_elements["order"] == "purchased?" || command_elements["order"] == "purchased")
+    if(command_elements["order"] == "purchased?" || command_elements["order"] == "purchased")
         show_customer_purchased_films();
     else if(command_elements["order"] == "notifications")
         show_massages();

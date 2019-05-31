@@ -13,6 +13,11 @@ Comment::Comment(int _id, std::string _content, int _customer_id)
     customer_id = _customer_id;
 }
 
+string Comment::get_content()
+{
+    return content;
+}
+
 int Comment::get_writer_id()
 {
     return customer_id;

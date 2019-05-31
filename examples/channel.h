@@ -72,7 +72,7 @@ public:
     void show_followers();
     void show_publisher_films();
     void search_in_films();
-    void show_film_details();
+    void get_film_details(int film_id,std::string* body);
     void show_customer_purchased_films();
     void show_massages();
     void delete_film(int film_id);

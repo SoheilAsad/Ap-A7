@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
         server.post("/publish", new PublishHandler(channel));
         server.get("/profile", new ProfileHandler(channel));
         server.post("/delete", new DeleteHandler(channel));
+        server.get("/detail", new DetailHandler(channel));
 
         server.run();
     }catch (Server::Exception e) {
