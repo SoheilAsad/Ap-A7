@@ -318,6 +318,14 @@ void Channel::get_publisher_films_info(string* body,string director)
     }
 }
 
+bool Channel::is_film_on(int film_id)
+{
+    Film* film = find_film(film_id);
+    if(film->get_film_state() == "on")
+        return true;
+    return false;
+}
+
 bool Channel::is_film_publisher(Film* film)
 {
     if(film->get_publisher_id() == customer->get_id())
@@ -525,17 +533,10 @@ void Channel::buy_the_film(int film_id)
     cerr <<"####6\n";
 }
 
-void Channel::rate_to_film()
+void Channel::rate_to_film(int film_id, int rate)
 {
-
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    // if(!film->is_customer_buyed_film_before(customer->get_id()))
-    //     throw PermissionDenied();
-    film->record_rate(customer->get_id(),stoi(command_elements["score"]));
-    send_massage_to_publisher(film,RATING_MASSAGE);
-    cout <<"OK" <<endl;
+    Film* film = find_film(film_id);
+    film->record_rate(customer->get_id(),rate);
 }
 
 void Channel::comment_on_the_film()
@@ -625,8 +626,6 @@ void Channel::do_post_command()
         reply_to_comment();
     else if(command_elements["order"] == "followers?")
         follow_publisher();
-    else if(command_elements["order"] == "rate?")
-        rate_to_film();
     else if(command_elements["order"] == "comments?")
         comment_on_the_film();
     // else

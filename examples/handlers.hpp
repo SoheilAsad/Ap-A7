@@ -69,4 +69,12 @@ private:
     Channel* channel;
 };
 
+class RateHandler : public RequestHandler {
+public:
+    RateHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif

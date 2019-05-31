@@ -24,6 +24,7 @@ public:
     int get_user_money();
     bool is_customer_buyed_film(int film_id);
     bool is_cretid_enough(int film_id);
+    bool is_film_on(int film_id);
     bool is_id_in_command_elements();
     Customer* find_customer_to_login();
     bool is_customer_a_publisher();
@@ -69,7 +70,7 @@ public:
     void follow_publisher();
     void increase_money(std::string amount);
     void buy_the_film(int film_id);
-    void rate_to_film();
+    void rate_to_film(int film_id,int rate);
     void comment_on_the_film();
     void show_followers();
     void show_publisher_films();
