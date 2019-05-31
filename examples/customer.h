@@ -12,6 +12,7 @@ public:
     std::string get_name();
     std::string get_password();
     virtual std::string get_type();
+    bool do_you_have_money(int price);
     int get_id();
     int get_money();
     void increase_money(int amout);

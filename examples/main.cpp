@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
         server.get("/profile", new ProfileHandler(channel));
         server.post("/delete", new DeleteHandler(channel));
         server.get("/detail", new DetailHandler(channel));
+        server.post("/buy", new BuyHandler(channel));
 
         server.run();
     }catch (Server::Exception e) {

@@ -135,10 +135,36 @@ Response* DetailHandler::callback(Request *req)
     body += "<!DOCTYPE html>\n";
     body += "<html>\n";
     body += "<body>\n";
+    body += "<form action=\"p_home\" method=\"get\">\n";
+    body += "<button type=\"submit\">go Home</button>\n";
+    body += "</form>\n";
     body += "<h2>Film Details</h2>\n";
     channel->get_film_details(stoi(req->getQueryParam("id")),&body);
+    if(!channel->is_customer_buyed_film(stoi(req->getQueryParam("id"))))
+    {
+        body += "<form action=\"buy\" method=\"post\">\n";
+        body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+        body += "<button type=\"submit\">buy film </button>\n";
+        body += "</form>\n"; 
+    }else
+    {
+        body += "<form action=\"rate\" method=\"post\">\n";
+        body += "<input name=\"rate\" type=\"text\" placeholder=\"rate\" />";
+        body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+        body += "<button type=\"submit\">get rate </button>\n";
+        body += "</form>\n";
+    }
     body += "</body>\n";
     body += "</html>\n";
     res->setBody(body);
+    return res;
+}
+
+Response* BuyHandler::callback(Request *req)
+{
+    Response *res;
+    int film_id = stoi(req->getBodyParam("id"));
+    channel->buy_the_film(film_id);
+    res = Response::redirect("/detail?id=" + req->getBodyParam("id"));
     return res;
 }

@@ -61,4 +61,12 @@ private:
     Channel* channel;
 };
 
+class BuyHandler : public RequestHandler {
+public:
+    BuyHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif

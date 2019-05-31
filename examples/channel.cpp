@@ -94,7 +94,7 @@ Customer* Channel::find_customer(int id)
 Film* Channel::find_film(int film_id)
 {
     for(int i = 0; i < film_list.size(); i++)
-        if(film_list[i]->get_id() == film_id && film_list[i]->get_film_state()=="on")
+        if(film_list[i]->get_id() == film_id)
             return film_list[i];
     return NULL;
 }
@@ -158,8 +158,6 @@ void Channel::add_money_to_channel(Film* film)
 {
     int money = calculate_publisher_share(film->get_price(),film->get_rate());
     publishers_money[film->get_publisher_id()] += money;
-    Customer* admin = find_customer(0);
-    admin->increase_money(film->get_price() - money);
 }
 
 vector<Customer*> Channel::sort_by_id(vector<Customer*> followers ,int followers_num)
@@ -331,7 +329,8 @@ void Channel::get_another_films_info(string* body)
 {
     vector<Film*> films = find_films_are_on();
     for(int i = 0; i < films.size(); i++)
-        if(!is_film_publisher(films[i]))
+        if(!is_film_publisher(films[i]) && customer->do_you_have_money(films[i]->get_price()) &&
+         !films[i]->is_customer_buyed_film_before(customer->get_id()))
         {
             *body += "<tr>\n" ;
             films[i]->get_films_info(body);
@@ -361,6 +360,14 @@ void Channel::get_buyed_films_info(string* body)
 int Channel::get_user_money()
 {
     return customer->get_money();
+}
+
+bool Channel::is_customer_buyed_film(int film_id)
+{
+    Film* film = find_film(film_id);
+    if(film->is_customer_buyed_film_before(customer->get_id()))
+        return true;
+    return false;
 }
 
 vector<int> Channel::sort_film_by_graf(int film_id)
@@ -495,21 +502,27 @@ void Channel::increase_money(string amount)
     customer->increase_money(stoi(amount));
 }
 
-void Channel::buy_the_film()
+bool Channel::is_cretid_enough(int film_id)
 {
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();    // if(film == NULL)
-    //     throw NotFound();
-    if(!film->is_customer_buyed_film_before(customer->get_id()))
-    {
-        customer->pay_money(film->get_price());
-        add_money_to_channel(film);
-        update_films_graf(film->get_id());
-        film->add_customer_to_buyer(customer->get_id());
-        send_massage_to_publisher(film,BUYING_MASSAGE);
-    }
-    cout <<"OK" <<endl;
+    Film* film = find_film(film_id);
+    if(customer->do_you_have_money(film->get_price()))
+        return true;
+    return false;
+}
+
+void Channel::buy_the_film(int film_id)
+{
+    cerr <<"####1\n";
+    Film* film = find_film(film_id);
+    cerr <<"####2\n";
+    customer->pay_money(film->get_price());
+    cerr <<"####3\n";
+    add_money_to_channel(film);
+    cerr <<"####4\n";
+    update_films_graf(film->get_id());
+    cerr <<"####5\n";
+    film->add_customer_to_buyer(customer->get_id());
+    cerr <<"####6\n";
 }
 
 void Channel::rate_to_film()
@@ -612,8 +625,6 @@ void Channel::do_post_command()
         reply_to_comment();
     else if(command_elements["order"] == "followers?")
         follow_publisher();
-    else if(command_elements["order"] == "buy?")
-        buy_the_film();
     else if(command_elements["order"] == "rate?")
         rate_to_film();
     else if(command_elements["order"] == "comments?")

@@ -65,9 +65,14 @@ std::vector<int> Customer::get_followers()
 
 void Customer::pay_money(int price)
 {
-    // if(money < price)
-    //     throw PermissionDenied();
     money -= price ;
+}
+
+bool Customer::do_you_have_money(int price)
+{
+    if(money >= price)
+        return true;
+    return false;
 }
 
 void Customer::print_info()
