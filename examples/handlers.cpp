@@ -159,7 +159,11 @@ Response* DetailHandler::callback(Request *req)
             body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
             body += "<button type=\"submit\">get rate </button>\n";
             body += "</form>\n";
-
+            body += "<form action=\"comment\" method=\"post\">\n";
+            body += "<input name=\"content\" type=\"text\" placeholder=\"comment\" />";
+            body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+            body += "<button type=\"submit\">send comment </button>\n";
+            body += "</form>\n";
         }
     }
     body += "</body>\n";
@@ -183,6 +187,16 @@ Response* RateHandler::callback(Request *req)
     int film_id = stoi(req->getBodyParam("id"));
     int rate = stoi(req->getBodyParam("rate"));
     channel->rate_to_film(film_id,rate);
+    res = Response::redirect("/detail?id=" + req->getBodyParam("id"));
+    return res;
+}
+
+Response* CommentHandler::callback(Request *req)
+{
+    Response *res;
+    int film_id = stoi(req->getBodyParam("id"));
+    string content = req->getBodyParam("content");
+    channel->comment_on_the_film(film_id,content);
     res = Response::redirect("/detail?id=" + req->getBodyParam("id"));
     return res;
 }

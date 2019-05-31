@@ -539,16 +539,10 @@ void Channel::rate_to_film(int film_id, int rate)
     film->record_rate(customer->get_id(),rate);
 }
 
-void Channel::comment_on_the_film()
+void Channel::comment_on_the_film(int film_id, string content)
 {
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    // if(!film->is_customer_buyed_film_before(customer->get_id()))
-    //     throw PermissionDenied();
-    film->add_comment_to_film(command_elements["content"], customer->get_id());
-    send_massage_to_publisher(film,COMMENTING_MASSAGE);
-    cout <<"OK" <<endl;
+    Film* film = find_film(film_id);
+    film->add_comment_to_film(content, customer->get_id());
 }
 
 
@@ -626,10 +620,6 @@ void Channel::do_post_command()
         reply_to_comment();
     else if(command_elements["order"] == "followers?")
         follow_publisher();
-    else if(command_elements["order"] == "comments?")
-        comment_on_the_film();
-    // else
-    //     throw NotFound();
 }
 
 void Channel::do_get_command()

@@ -71,7 +71,7 @@ public:
     void increase_money(std::string amount);
     void buy_the_film(int film_id);
     void rate_to_film(int film_id,int rate);
-    void comment_on_the_film();
+    void comment_on_the_film(int film_id, std::string content);
     void show_followers();
     void show_publisher_films();
     void search_in_films();

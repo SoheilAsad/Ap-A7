@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
         server.get("/detail", new DetailHandler(channel));
         server.post("/buy", new BuyHandler(channel));
         server.post("/rate", new RateHandler(channel));
+        server.post("/comment", new CommentHandler(channel));
 
         server.run();
     }catch (Server::Exception e) {

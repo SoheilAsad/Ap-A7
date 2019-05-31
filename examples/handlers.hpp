@@ -77,4 +77,12 @@ private:
     Channel* channel;
 };
 
+class CommentHandler : public RequestHandler {
+public:
+    CommentHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 #endif
