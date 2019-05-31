@@ -29,6 +29,14 @@ private:
     Channel* channel;
 };
 
+class CustomerHomeHandler : public RequestHandler {
+public:
+    CustomerHomeHandler(Channel* _channel) : channel(_channel){}
+    Response *callback(Request *);
+private:
+    Channel* channel;
+};
+
 class PublishHandler : public RequestHandler {
 public:
     PublishHandler(Channel* _channel) : channel(_channel){}

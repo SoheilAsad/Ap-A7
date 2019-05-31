@@ -42,7 +42,7 @@ public:
     std::vector<Film*> find_publisher_films(int publisher_id);
     std::vector<Film*> find_films_are_on();
     std::vector<Film*> find_customer_buyed_films();
-    void show_recommendation_films(int film_id);
+    void get_recommendation_films(int film_id,std::string* body);
     std::vector<Film*> find_best_film(int film_id);
     void add_film_to_graf();
     void update_films_graf(int film_id);

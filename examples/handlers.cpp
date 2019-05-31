@@ -48,7 +48,7 @@ Response* PublisherHomeHandler::callback(Request *req)
     Response *res = new Response;
     res->setHeader("Content-Type", "text/html");
     string body;
-    ifstream f("./static/film_table");
+    ifstream f("./static/p_home");
     if(f) {
         ostringstream ss;
         ss << f.rdbuf();
@@ -71,6 +71,25 @@ Response* PublisherHomeHandler::callback(Request *req)
     body += "</tr>\n";
     channel->get_another_films_info(&body);
      body += "</table>\n";
+    body += "</body>\n";
+    body += "</html>";
+    res->setBody(body);
+    return res;
+}
+
+Response* CustomerHomeHandler::callback(Request *req)
+{
+    Response *res = new Response;
+    res->setHeader("Content-Type", "text/html");
+    string body;
+    ifstream f("./static/c_home");
+    if(f) {
+        ostringstream ss;
+        ss << f.rdbuf();
+        body = ss.str();
+    }
+    channel->get_another_films_info(&body);
+    body += "</table>\n";
     body += "</body>\n";
     body += "</html>";
     res->setBody(body);
@@ -136,9 +155,9 @@ Response* DetailHandler::callback(Request *req)
     body += "<!DOCTYPE html>\n";
     body += "<html>\n";
     body += "<body>\n";
-    body += "<form action=\"/\" method=\"get\">";
-    body += "<button type=\"submit\" >Logout</button>";
-	body += "</form>";
+    body += "<form action=\"/\" method=\"get\">\n";
+    body += "<button type=\"submit\" >Logout</button>\n";
+	body += "</form>\n";
     body += "<form action=\"p_home\" method=\"get\">\n";
     body += "<button type=\"submit\">go Home</button>\n";
     body += "</form>\n";
@@ -149,23 +168,24 @@ Response* DetailHandler::callback(Request *req)
         if(!channel->is_customer_buyed_film(film_id))
         {
            body += "<form action=\"buy\" method=\"post\">\n";
-           body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+           body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">\n";
            body += "<button type=\"submit\">buy film </button>\n";
            body += "</form>\n"; 
         }else
         {
             body += "<form action=\"rate\" method=\"post\">\n";
-            body += "<input name=\"rate\" type=\"text\" placeholder=\"rate\" />";
-            body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+            body += "<input name=\"rate\" type=\"text\" placeholder=\"rate\" />\n";
+            body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">\n";
             body += "<button type=\"submit\">get rate </button>\n";
             body += "</form>\n";
             body += "<form action=\"comment\" method=\"post\">\n";
-            body += "<input name=\"content\" type=\"text\" placeholder=\"comment\" />";
-            body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">";
+            body += "<input name=\"content\" type=\"text\" placeholder=\"comment\" />\n";
+            body += "<input type=\"hidden\" name=\"id\" " "value=" +req->getQueryParam("id") + ">\n";
             body += "<button type=\"submit\">send comment </button>\n";
             body += "</form>\n";
         }
     }
+    channel->get_recommendation_films(stoi(req->getQueryParam("id")),&body);
     body += "</body>\n";
     body += "</html>\n";
     res->setBody(body);

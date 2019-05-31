@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<form action="/" method="get">
+        	<button type="submit" >Logout</button>
+	</form>
+	<form action="/profile" method="get">
+        	<button type="submit" >profile</button>
+	</form>
+    <h1>HOME</h1>
+</body>
+<head>
+<style>
+table {
+ 	width:70%;
+}
+table, th, td {
+ 	border: 1px solid black;
+ 	border-collapse: collapse;
+}
+th, td {
+ 	padding: 15px;
+ 	text-align: left;
+}
+table#t01 tr:nth-child(even) {
+ 	background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+	background-color: #fff;
+}
+table#t01 th {
+ 	background-color: black;
+ 	color: white;
+}
+</style>
+</head>
+<body>
+
+<h3>Films Published</h3>
+
+	<form action="/p_home" method="get">
+		<input name="director" type="text" placeholder="director name" />	
+        <button type="submit" >filter</button>
+	</form>
+
+<table id="t01">
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Year</th>
+	<th>Length</th>
+	<th>Rate</th>
+	<th>Director</th>
+	<th> </th>
+  </tr>

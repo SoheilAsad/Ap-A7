@@ -66,6 +66,13 @@ void Film::get_films_info(string* body)
     *body += "<td>" + director + "</td>\n" ;
 }
 
+void Film::get_film_short_info(std::string* body)
+{
+    *body += "<td>" + name + "</td>\n" ;
+    *body += "<td>" + to_string(length) + "</td>\n" ;
+    *body += "<td>" + director + "</td>\n" ;
+}
+
 Comment* Film::find_comment(int comment_id)
 {
     for(int i = 0; i < comments_list.size(); i++)

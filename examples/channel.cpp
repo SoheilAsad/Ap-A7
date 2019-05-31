@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
+#include <sstream>
+#include <fstream>
 
 #include "customer.h"
 #include "publisher.h"
@@ -405,7 +407,8 @@ void Channel::erase_repetitious_film_id(vector<int> &films, int film_id)
             i--;
         }
     for(int i= 0; i < films.size(); i++)
-        if(find_film(films[i])->is_customer_buyed_film_before(customer->get_id()) )
+        if(find_film(films[i])->is_customer_buyed_film_before(customer->get_id()) || 
+         is_film_publisher(find_film(films[i])))
         {
             films.erase(films.begin()+i,films.begin()+i+1);
             i--;
@@ -426,17 +429,28 @@ vector<Film*> Channel::find_best_film(int film_id)
     return top_films;
 }
 
-void Channel::show_recommendation_films(int film_id)
+void Channel::get_recommendation_films(int film_id,string* body)
 {
     vector<Film*> films = find_best_film(film_id);
-    cout << "Recommendation Film" <<endl; 
-    cout <<"#. Film Id | Film Name | Film Length | Film Director" <<endl;
+    ifstream f("./static/recommend");
+    string file;
+    if(f) {
+        ostringstream ss;
+        ss << f.rdbuf();
+        file = ss.str();
+    }
+    *body += file; 
     for(int i = 0; i < films.size(); i++)
     {
-        cout <<i+1 <<". " ;
-        films[i]->print_berif_info();
-        cout <<endl;
+        *body += "<tr>\n" ;
+        films[i]->get_film_short_info(body);
+        *body += "<td> <form action=\"detail\" method=\"get\">\n";
+        *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
+        *body += "<button type=\"submit\">details</button>\n";
+        *body += "</form> </td>\n";
+        *body += "</tr>\n" ;
     }
+    *body += "</table>\n";
 }
 
 void Channel::singup_customer()
@@ -520,17 +534,11 @@ bool Channel::is_cretid_enough(int film_id)
 
 void Channel::buy_the_film(int film_id)
 {
-    cerr <<"####1\n";
     Film* film = find_film(film_id);
-    cerr <<"####2\n";
     customer->pay_money(film->get_price());
-    cerr <<"####3\n";
     add_money_to_channel(film);
-    cerr <<"####4\n";
     update_films_graf(film->get_id());
-    cerr <<"####5\n";
     film->add_customer_to_buyer(customer->get_id());
-    cerr <<"####6\n";
 }
 
 void Channel::rate_to_film(int film_id, int rate)
