@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <iostream>
-#include <math.h>
 #include <sstream>
 #include <fstream>
 
@@ -11,10 +10,6 @@
 #include "film.h"
 
 using namespace std;
-
-const string BUYING_MASSAGE = " buy your film ";
-const string RATING_MASSAGE = " rate your film ";
-const string COMMENTING_MASSAGE = " comment on your film ";
 
 Channel::Channel()
     : films_graf(vector<vector<int>>())
@@ -83,13 +78,6 @@ string Channel::get_user_type()
     return customer->get_type();
 }
 
-bool Channel::is_id_in_command_elements()
-{
-    if(command_elements.count("film_id"))
-		return true;
-    return false;
-}
-
 Customer* Channel::find_customer(int id)
 {
     for(int i = 0; i < customer_list.size(); i++)
@@ -104,99 +92,6 @@ Film* Channel::find_film(int film_id)
         if(film_list[i]->get_id() == film_id)
             return film_list[i];
     return NULL;
-}
-
-vector<Customer*> Channel::find_followers(vector<int> followers_id)
-{
-    vector<Customer*> followers;
-    for(int i = 0; i < followers_id.size(); i ++)
-        followers.push_back(find_customer(followers_id[i]));
-    return followers;
-}
-
-void Channel::send_reply_massage(int writer_id)
-{
-    string massage;
-    massage = "Publisher " + customer->get_name() + " with id " + to_string(customer->get_id()) 
-        + " reply to your comment." ;
-    Customer* writer = find_customer(writer_id);
-    writer->add_massage_to_new_massages(massage);
-}
-
-void Channel::send_publishing_massage_to_followers()
-{
-    vector<int> followers_id = customer->get_followers();
-    vector<Customer*> followers = find_followers(followers_id);
-    string massage;
-    massage = "Publisher " + customer->get_name() + " with id " + to_string(customer->get_id())
-        + " register new film." ;
-    for(int i = 0; i < followers.size(); i++)
-        followers[i]->add_massage_to_new_massages(massage);
-}
-
-void Channel::send_following_massage(int publisher_id)
-{
-    string massage;
-    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + " follow you." ;
-    Customer* publisher = find_customer(publisher_id);
-    publisher->add_massage_to_new_massages(massage);
-}
-
-void Channel::send_massage_to_publisher(Film* film,string massage_type)
-{
-    string massage;
-    massage = "User " + customer->get_name() + " with id " + to_string(customer->get_id()) + massage_type
-        + film->get_name() + " with id " + to_string(film->get_id()) + ".";
-    Customer* publisher = find_customer(film->get_publisher_id());
-    publisher->add_massage_to_new_massages(massage);
-}
-
-int Channel::calculate_publisher_share(int price, float rate)
-{
-    if(rate < 5)
-        return floor(price * 0.8);
-    else if(rate < 8)
-        return floor(price * 0.9);
-    else
-        return floor(price * 0.95);
-}
-
-void Channel::add_money_to_channel(Film* film)
-{
-    int money = calculate_publisher_share(film->get_price(),film->get_rate());
-    publishers_money[film->get_publisher_id()] += money;
-}
-
-vector<Customer*> Channel::sort_by_id(vector<Customer*> followers ,int followers_num)
-{
-   for (int i = 0; i < followers_num-1; i++)           
-       for (int j = 0; j < followers_num-i-1; j++)  
-            if (followers[j]->get_id() > followers[j+1]->get_id()) 
-                swap(followers[j], followers[j+1]); 
-    return followers;
-}
-
-void Channel::print_followers_info(std::vector<Customer*> followers)
-{
-    cout <<"List of Followers" <<endl;
-    cout << "#. User Id | User Username | User Email" <<endl;
-    for(int i = 0; i < followers.size(); i++)
-    {
-        cout <<i+1 <<". " ;
-        followers[i]->print_info();
-        cout <<endl;
-    }
-}
-
-void Channel::print_films_info(vector<Film*> publisher_films)
-{
-    cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director" <<endl;
-    for(int i = 0; i < publisher_films.size(); i++)
-    {
-        cout <<i+1 <<". " ;
-        publisher_films[i]->print_info();
-        cout <<endl;
-    }
 }
 
 void Channel::add_film_to_graf()
@@ -250,51 +145,6 @@ vector<Film*> Channel::sort_film_by_id(vector<Film*> publisher_films)
     return publisher_films;
 }
 
-vector<Film*> Channel::filter_films_by_name(vector<Film*> publisher_films)
-{
-    vector<Film*> sorted_films;
-    for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_name() == command_elements["name"])
-            sorted_films.push_back(publisher_films[i]);
-    return sorted_films;
-}
-
-vector<Film*> Channel::filter_films_by_min_rate(vector<Film*> publisher_films)
-{
-    vector<Film*> sorted_films;
-    for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_rate() >= stoi(command_elements["min_rate"]))
-            sorted_films.push_back(publisher_films[i]);
-    return sorted_films;
-}
-
-vector<Film*> Channel::filter_films_by_min_year(vector<Film*> publisher_films)
-{
-    vector<Film*> sorted_films;
-    for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_year() >= stoi(command_elements["min_year"]))
-            sorted_films.push_back(publisher_films[i]);
-    return sorted_films;
-}
-
-vector<Film*> Channel::filter_films_by_price(vector<Film*> publisher_films)
-{
-    vector<Film*> sorted_films;
-    for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_price() == stoi(command_elements["price"]))
-            sorted_films.push_back(publisher_films[i]);
-    return sorted_films;
-}
-
-vector<Film*> Channel::filter_films_by_max_year(vector<Film*> publisher_films)
-{
-    vector<Film*> sorted_films;
-    for(int i = 0; i < publisher_films.size(); i++) 
-        if(publisher_films[i]->get_year() <= stoi(command_elements["max_year"]))
-            sorted_films.push_back(publisher_films[i]);
-    return sorted_films;
-}
-
 vector<Film*> Channel::filter_films_by_director(vector<Film*> publisher_films, string director)
 {
     vector<Film*> sorted_films;
@@ -302,6 +152,14 @@ vector<Film*> Channel::filter_films_by_director(vector<Film*> publisher_films, s
         if(publisher_films[i]->get_director_name() == director)
             sorted_films.push_back(publisher_films[i]);
     return sorted_films;
+}
+
+void add_detail_item_to_list(Film* film ,string* body)
+{
+    *body += "<form action=\"detail\" method=\"get\">\n";
+    *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(film->get_id()) + ">";
+    *body += "<button type=\"submit\">details</button>\n";
+    *body += "</form> </td>\n";
 }
 
 void Channel::get_publisher_films_info(string* body,string director)
@@ -317,10 +175,7 @@ void Channel::get_publisher_films_info(string* body,string director)
         *body += "<td> <form action=\"delete?id=" +to_string(films[i]->get_id()) + "\" method=\"post\">\n";
         *body += "<button type=\"submit\">delete</button>\n";
         *body += "</form> \n";
-        *body += "<form action=\"detail\" method=\"get\">\n";
-        *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
-        *body += "<button type=\"submit\">details</button>\n";
-        *body += "</form> </td>\n";
+        add_detail_item_to_list(films[i],body);
         *body += "</tr>\n" ;
     }
 }
@@ -349,10 +204,8 @@ void Channel::get_another_films_info(string* body)
         {
             *body += "<tr>\n" ;
             films[i]->get_films_info(body);
-            *body += "<td> <form action=\"detail\" method=\"get\">\n";
-            *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
-            *body += "<button type=\"submit\">details</button>\n";
-            *body += "</form> </td>\n";
+            *body += "<td>";
+            add_detail_item_to_list(film_list[i],body);
             *body += "</tr>\n" ;
         }
 }
@@ -364,10 +217,8 @@ void Channel::get_buyed_films_info(string* body)
         {
             *body += "<tr>\n" ;
             film_list[i]->get_films_info(body);
-            *body += "<td> <form action=\"detail\" method=\"get\">\n";
-            *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(film_list[i]->get_id()) + ">";
-            *body += "<button type=\"submit\">details</button>\n";
-            *body += "</form> </td>\n";
+            *body += "<td>";
+            add_detail_item_to_list(film_list[i],body);
             *body += "</tr>\n" ;
         }
 }
@@ -406,7 +257,7 @@ vector<int> Channel::sort_film_by_graf(int film_id)
 void Channel::erase_repetitious_film_id(vector<int> &films, int film_id)
 {
     for(int i= 0; i < films.size(); i++)
-        if(films[i] == film_id || find_film(films[i]) == NULL )
+        if(films[i] == film_id || find_film(films[i])->get_film_state() == "off" )
         {
             films.erase(films.begin()+i,films.begin()+i+1);
             i--;
@@ -449,10 +300,8 @@ void Channel::get_recommendation_films(int film_id,string* body)
     {
         *body += "<tr>\n" ;
         films[i]->get_film_short_info(body);
-        *body += "<td> <form action=\"detail\" method=\"get\">\n";
-        *body += "<input type=\"hidden\" name=\"id\" " "value=" +to_string(films[i]->get_id()) + ">";
-        *body += "<button type=\"submit\">details</button>\n";
-        *body += "</form> </td>\n";
+        *body += "<td>";
+        add_detail_item_to_list(film_list[i],body);
         *body += "</tr>\n" ;
     }
     *body += "</table>\n";
@@ -463,7 +312,6 @@ void Channel::singup_customer()
     if(is_customer_a_publisher())
     {
         customer_list.push_back(new Publisher(command_elements,customer_num));
-        publishers_money.insert(pair<int,int>(customer_num,0));
     }
     else
         customer_list.push_back(new Customer(command_elements,customer_num));
@@ -476,52 +324,12 @@ void Channel::login_customer()
     customer = find_customer_to_login();
 }
 
-void Channel::do_primitive_commands()
-{
-    if(command_elements["order_type"] == "POST")
-    {
-        if(command_elements["order"] == "signup?")
-            singup_customer();
-        else if(command_elements["order"] == "login?")
-            login_customer();
-        // else
-        //     throw PermissionDenied();
-    }
-    // else
-    //     throw BadRequest();
-}
 
 void Channel::publish_the_film()
 {
     film_list.push_back(new Film(film_num,command_elements,customer->get_id()));
     add_film_to_graf();
     film_num++;
-}
-
-void Channel::give_money_to_publisher()
-{   
-    customer->increase_money(publishers_money[customer->get_id()]);
-    publishers_money[customer->get_id()] = 0 ;
-    cout << "OK" <<endl;
-}
-
-void Channel::reply_to_comment()
-{
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    int writer_id = film->get_comment_writer_id(stoi(command_elements["comment_id"]));
-    film->write_repley_in_comment_box(stoi(command_elements["comment_id"]),command_elements["content"]);
-    send_reply_massage(writer_id);
-    cout <<"OK" <<endl;
-}
-
-void Channel::follow_publisher()
-{
-    Customer* publisher = find_customer(stoi(command_elements["user_id"]));
-    // if(publisher == NULL)
-    //     throw NotFound();
-    publisher->add_customer_to_followers(customer->get_id());
-    send_following_massage(publisher->get_id());
-    cout <<"OK" <<endl;
 }
 
 void Channel::increase_money(string amount)
@@ -541,7 +349,6 @@ void Channel::buy_the_film(int film_id)
 {
     Film* film = find_film(film_id);
     customer->pay_money(film->get_price());
-    add_money_to_channel(film);
     update_films_graf(film->get_id());
     film->add_customer_to_buyer(customer->get_id());
 }
@@ -565,94 +372,13 @@ void Channel::get_film_details(int film_id,string* body)
     film->get_details(body);
 }
 
-void Channel::show_customer_purchased_films()
-{
-    vector<Film*>films = find_customer_buyed_films();
-    print_films_info(films);
-}
-
-void Channel::show_massages()
-{
-    if(command_elements.size() == 2)
-    {
-        customer->show_unread_massages();
-        customer->move_unread_massages_to_readed_box();
-    }
-    else
-        customer->show_readed_massages(stoi(command_elements["limit"]));
-}
-
 void Channel::delete_film(int film_id)
 {
     Film* film = find_film(film_id);
     film->delete_film();
 }
 
-void Channel::delete_comment()
-{
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    // if(film->get_publisher_id() != customer->get_id())
-    //     throw PermissionDenied();
-    film->delete_comment(stoi(command_elements["comment_id"]));
-    cout <<"OK" <<endl;
-}
-
-void Channel::edit_film_info()
-{
-    // if(customer->get_type() == "customer")
-    //     throw PermissionDenied();
-    Film* film = find_film(stoi(command_elements["film_id"]));
-    // if(film == NULL)
-    //     throw NotFound();
-    // if(film->get_publisher_id() != customer->get_id())
-    //     throw PermissionDenied();
-    film->change_film_info(command_elements);
-    cout <<"OK" <<endl;
-}
-
 void Channel::show_money()
 {
     cout << customer->get_money() <<endl;
-}
-
-void Channel::do_post_command()
-{
-    if(command_elements["order"] == "delete_comments?")
-        delete_comment();
-    else if(command_elements["order"] == "put_films?")
-        edit_film_info();
-    else if(command_elements["order"] == "films?")
-        publish_the_film();
-    else if(command_elements["order"] == "money")
-        give_money_to_publisher();
-    else if(command_elements["order"] == "replies?")
-        reply_to_comment();
-    else if(command_elements["order"] == "followers?")
-        follow_publisher();
-}
-
-void Channel::do_get_command()
-{
-    if(command_elements["order"] == "purchased?" || command_elements["order"] == "purchased")
-        show_customer_purchased_films();
-    else if(command_elements["order"] == "notifications")
-        show_massages();
-    else if(command_elements["order"] == "money")
-        show_money();
-    // else
-    //     throw NotFound();
-}
-
-void Channel::do_command()
-{
-    if(command_elements["order_type"] == "POST")
-        do_post_command();
-    else if(command_elements["order_type"] == "GET")
-        do_get_command();
-    // else 
-    //     throw BadRequest();
 }

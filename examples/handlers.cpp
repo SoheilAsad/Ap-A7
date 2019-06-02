@@ -15,7 +15,7 @@ Response *SignupHandler::callback(Request *req) {
     command["email"] = req->getBodyParam("email");
     command["publisher"] = req->getBodyParam("publisher");
     if(channel->is_username_used(command["username"]))
-        return res = Response::redirect("/");
+        return res = Response::redirect("/bad_name");
     channel->set_command_elements(command);
     channel->singup_customer();
     if(channel ->is_customer_a_publisher())
@@ -33,7 +33,7 @@ Response *LoginHandler::callback(Request *req) {
     command["password"] = req->getBodyParam("password");
     channel->set_command_elements(command);
     if(!channel->is_customer_signup_before())
-        return res = Response::redirect("/");
+        return res = Response::redirect("/bad_request");
     channel->login_customer();
     if(channel ->get_user_type() == "publisher")
         res = Response::redirect("/p_home");

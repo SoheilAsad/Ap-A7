@@ -37,12 +37,6 @@ int Film::get_id()
     return id;
 }
 
-float make_two_decimal_places(float num)
-{
-    float value = (int)(num * 100 ); 
-    return (float)value / 100;
-}
-
 float Film::get_rate()
 {
     float rate = 0;
@@ -52,8 +46,19 @@ float Film::get_rate()
         rate = rate / (raters_id.size()-1); 
     else
         rate = rate / raters_id.size();
-    rate = make_two_decimal_places(rate);
     return rate;
+}
+
+string rate_to_string(float rate)
+{
+    string num = to_string(rate);
+    cerr <<"*num" <<num <<endl;
+    if(num[2] == '0')
+        num.erase(num.begin()+1,num.end());
+    else
+        num.erase(num.begin()+4,num.end());
+    cerr <<"#num" <<num <<endl;
+    return num;
 }
 
 void Film::get_films_info(string* body)
@@ -62,7 +67,7 @@ void Film::get_films_info(string* body)
     *body += "<td>" + to_string(price) + "</td>\n" ;
     *body += "<td>" + to_string(year) + "</td>\n" ;
     *body += "<td>" + to_string(length) + "</td>\n" ;
-    *body += "<td>" + to_string((int)get_rate()) + "</td>\n" ;
+    *body += "<td>" + rate_to_string(get_rate()) + "</td>\n" ;
     *body += "<td>" + director + "</td>\n" ;
 }
 
@@ -71,30 +76,6 @@ void Film::get_film_short_info(std::string* body)
     *body += "<td>" + name + "</td>\n" ;
     *body += "<td>" + to_string(length) + "</td>\n" ;
     *body += "<td>" + director + "</td>\n" ;
-}
-
-Comment* Film::find_comment(int comment_id)
-{
-    for(int i = 0; i < comments_list.size(); i++)
-        if(comments_list[i]->get_id() == comment_id)
-            return comments_list[i];
-    return NULL;
-}
-
-int Film::get_comment_writer_id(int comment_id)
-{
-    Comment* comment = find_comment(comment_id);
-    // if(comment == NULL)
-    //     throw NotFound();
-    return comment->get_writer_id();
-}
-
-void Film::write_repley_in_comment_box(int comment_id,string content)
-{
-    Comment* comment = find_comment(comment_id);
-    // if(comment == NULL)
-    //     throw NotFound();
-    comment->write_repley(content);
 }
 
 int Film::get_price()
@@ -165,26 +146,13 @@ string Film::get_director_name()
     return director;
 }
 
-void Film::print_info()
-{
-    cout <<id <<" | " <<name <<" | " <<length <<" | " <<price <<" | " 
-        <<get_rate() <<" | " <<year <<" | " <<director ;
-}
-
-void Film::show_comments()
-{
-    cout <<"Comments" <<endl;
-    for(int i=0; i < comments_list.size(); i++)
-        comments_list[i]->show_info();
-}
-
 void Film::get_details(string* body)
 {
     *body += "<ul>\n";
     *body += "<li>Name : " + name + "</li>\n" ;
     *body += "<li>Length : " + to_string(length) + "</li>\n" ;
     *body += "<li>Price : " + to_string(price) + "</li>\n" ;
-    *body += "<li>Rate : " + to_string((int)get_rate()) + "</li>\n" ;
+    *body += "<li>Rate : " + rate_to_string(get_rate()) + "</li>\n" ;
     *body += "<li>Year : " + to_string(year) + "</li>\n" ;
     *body += "<li>Director : " + director + "</li>\n" ;
     *body += "<li>Summary : " + summary + "</li>\n" ;
@@ -201,38 +169,7 @@ void Film::get_details(string* body)
     }
 }
 
-void Film::print_berif_info()
-{
-    cout <<id <<" | " <<name <<" | " <<length <<" | " <<director ;
-}
-
 void Film::delete_film()
 {
     film_state = "off";
-}
-
-void Film::delete_comment(int comment_id)
-{
-    for(int i = 0; i < comments_list.size(); i++)
-        if(comments_list[i]->get_id() == comment_id)
-        {
-            delete comments_list[i];
-            comments_list.erase(comments_list.begin(),comments_list.begin()+1);
-            return;
-        }
-    // throw NotFound();
-}
-
-void Film::change_film_info(map<string,string>command_elements)
-{
-    if(command_elements.count("name"))
-        name = command_elements["name"];
-    if(command_elements.count("year"))
-        year = stoi(command_elements["year"]);
-    if(command_elements.count("length"))
-        length = stoi(command_elements["length"]);
-    if(command_elements.count("summary"))
-        summary = command_elements["summary"];
-    if(command_elements.count("director"))
-        director = command_elements["director"];
 }

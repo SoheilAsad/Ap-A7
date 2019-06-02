@@ -15,9 +15,6 @@ public:
     void get_films_info(std::string* body);
     void get_film_short_info(std::string* body);
     int get_id();
-    int get_comment_writer_id(int comment_id);
-    Comment* find_comment(int comment_id);
-    void write_repley_in_comment_box(int comment_id,std::string content);
     int get_price();
     int get_publisher_id();
     float get_rate();
@@ -30,13 +27,8 @@ public:
     void record_rate(int customer_id,int score);
     bool is_customer_rate_before(int customer_id);
     void add_comment_to_film(std::string content, int customer_id);
-    void print_info();
     void get_details(std::string* body);
-    void show_comments();
-    void print_berif_info();
     void delete_film();
-    void delete_comment(int comment_id);
-    void change_film_info(std::map<std::string,std::string>command_elements);
     
 private:
     int id;
