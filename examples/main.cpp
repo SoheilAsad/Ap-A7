@@ -13,6 +13,8 @@ int main(int argc, char **argv) {
         server.setNotFoundErrPage("static/404.html");
         server.get("/signup", new ShowPage("static/signup.html"));
         server.post("/signup", new SignupHandler(channel));
+        server.get("/bad_request", new ShowPage("static/bad_request.html"));
+        server.get("/bad_name", new ShowPage("static/bad_name.html"));
         server.get("/", new ShowPage("static/home.html"));
         server.get("/c_home", new CustomerHomeHandler(channel));
         server.get("/p_home", new PublisherHomeHandler(channel));
