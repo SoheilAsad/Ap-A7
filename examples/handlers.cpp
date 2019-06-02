@@ -45,6 +45,7 @@ Response *LoginHandler::callback(Request *req) {
 
 Response* PublisherHomeHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res = new Response;
     res->setHeader("Content-Type", "text/html");
     string body;
@@ -83,6 +84,7 @@ Response* PublisherHomeHandler::callback(Request *req)
 
 Response* CustomerHomeHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res = new Response;
     res->setHeader("Content-Type", "text/html");
     string body;
@@ -102,6 +104,7 @@ Response* CustomerHomeHandler::callback(Request *req)
 
 Response* PublishHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res;
     map<string,string> command;
     command["name"] = req->getBodyParam("name");
@@ -118,6 +121,7 @@ Response* PublishHandler::callback(Request *req)
 
 Response* ProfileHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res = new Response;
     res->setHeader("Content-Type", "text/html");
     if(req->getQueryParam("amount") != "")
@@ -145,6 +149,7 @@ Response* ProfileHandler::callback(Request *req)
 
 Response* DeleteHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res;
     int film_id = stoi(req->getQueryParam("id"));
     channel->delete_film(film_id);
@@ -154,6 +159,7 @@ Response* DeleteHandler::callback(Request *req)
 
 Response* DetailHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res = new Response;
     res->setHeader("Content-Type", "text/html");
     int film_id = stoi(req->getQueryParam("id"));
@@ -199,6 +205,7 @@ Response* DetailHandler::callback(Request *req)
 
 Response* BuyHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res;
     int film_id = stoi(req->getBodyParam("id"));
     channel->buy_the_film(film_id);
@@ -208,6 +215,7 @@ Response* BuyHandler::callback(Request *req)
 
 Response* RateHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res;
     int film_id = stoi(req->getBodyParam("id"));
     int rate = stoi(req->getBodyParam("rate"));
@@ -218,6 +226,7 @@ Response* RateHandler::callback(Request *req)
 
 Response* CommentHandler::callback(Request *req)
 {
+    channel->set_online_user(stoi(req->getSessionId()));
     Response *res;
     int film_id = stoi(req->getBodyParam("id"));
     string content = req->getBodyParam("content");

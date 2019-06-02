@@ -12,6 +12,7 @@ class Channel
 public:
     Channel();
     ~Channel();
+    void set_online_user(int customer_id);
     void set_command_elements(std::map<std::string,std::string> _command_elements);
     void singup_customer();
     void login_customer();

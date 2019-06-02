@@ -41,6 +41,11 @@ int Channel::get_user_id()
     return customer->get_id();
 }
 
+void Channel::set_online_user(int customer_id)
+{
+    customer = find_customer(customer_id) ;
+}
+
 bool Channel::is_username_used(std::string username)
 {
     for(int i = 0; i < customer_list.size(); i++)
