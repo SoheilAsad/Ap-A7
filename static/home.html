@@ -1,12 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <body style="text-align: center;">
-    <h1>AP HTTP</h1>
-    <img src="/home.png" style="width:5%;">
-    <br />
-    <a href="/signup">Go to signup page</a>
-    <br>
-	<a href="/login">Go to login page</a>
+<style>
+h {
+	color: red;
+	font-size:150px;
+}
+h3 {
+	color: Orange;
+	font-size:30px;
+}
+body{
+	text-align: center;
+	background-color:LimeGreen  ;
+}
+input[type=submit] {
+
+  width: 30%;
+  background-color: Green;
+  color: white;
+  padding: 25px 20px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+  <body>
+    <h>Welcome</h>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+	<h3>please choose your action :</h3>
+<br />
+<br />
+<br />
+	<form action="/signup" method="get">
+	<input type="submit" value="Signup">
+ 	</form>
+	<form action="/login" method="get">
+	<input type="submit" value="Login">
+ 	</form>
+
     <br>
   </body>
 </html>

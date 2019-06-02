@@ -1,17 +1,89 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h2>Film Publishing</h2>
-    <div>
-      <form action="/publish" method="post">
-        <input name="name" type="text" placeholder="name" />
-        <input name="price" type="text" placeholder="price" />
-		<input name="director" type="text" placeholder="director" />
-		<input name="length" type="text" placeholder="length" />
-		<input name="year" type="text" placeholder="year" />
-		<input name="summary" type="text" placeholder="summary" />
-        <button type="submit" >publish</button>
-      </form>
-    </div>
-  </body>
+<style>
+body{
+	background-color:DarkTurquoise   ;
+}
+
+h1 {
+	color: DarkSlateBlue ;
+	font-size:50px;
+	text-align: center;
+}
+
+button[type=submit] {
+
+  width: 15%;
+  background-color: Green;
+  color: white;
+  padding: 10px 20px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type=text],[type=password] {
+	
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type=submit] {
+
+  width: 50%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type=text]:focus,[type=password]:focus {
+  background-color: lightblue;
+}
+
+div {
+	width: 50%;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+</style>
+<body >
+	<h1>Film Publishing</h1>
+	<form action="/" method="get">	
+        <button type="submit" >Logout</button>
+	</form>
+	<form action="/p_home" method="get">
+        <button type="submit" >go Home</button>
+	</form>
+	<br />
+	<br />
+<div>
+  <form action="/publish" method="post">
+    <label for="fname">Name</label>
+    <input type="text" id="fname" name="name" placeholder="Film name..">
+    <label for="lname">Price</label>
+    <input type="text" id="lname" name="price" placeholder="Film price..">
+    <label for="fname">Director</label>
+    <input type="text" id="fname" name="director" placeholder="Film director..">
+    <label for="fname">Length</label>
+    <input type="text" id="fname" name="length" placeholder="Film length..">
+    <label for="fname">Year</label>
+    <input type="text" id="fname" name="year" placeholder="Film year..">
+	<label for="fname">Summary</label>
+    <input type="text" id="fname" name="summary" placeholder="Film summary..">
+    <input type="submit" value="Publish">
+  </form>
+</div>
+
+</body>
 </html>

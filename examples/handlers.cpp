@@ -56,10 +56,13 @@ Response* PublisherHomeHandler::callback(Request *req)
     }
     channel->get_publisher_films_info(&body,req->getQueryParam("director"));
     body += "</table>\n";
+    body += "<br />";
     body += "<form action=\"/publish\" method=\"get\">\n";
     body += "<button type=\"submit\" >publish film</button>\n";
     body += "</form>\n";
-    body += "<h4>Films</h4>\n";
+    body += "<br />";
+    body += "<br />";
+    body += "<h2>Films</h2>\n";
     body += "<table id=\"t01\">\n";
     body += "<tr>\n";
     body += "<th>Name</th>\n";
@@ -68,6 +71,7 @@ Response* PublisherHomeHandler::callback(Request *req)
     body += "<th>Length</th>\n";
     body += "<th>Rate</th>\n";
     body += "<th>Director</th>\n";
+    body += "<th> </th>\n";
     body += "</tr>\n";
     channel->get_another_films_info(&body);
      body += "</table>\n";
@@ -119,7 +123,7 @@ Response* ProfileHandler::callback(Request *req)
     if(req->getQueryParam("amount") != "")
         channel->increase_money(req->getQueryParam("amount"));
     string body;
-    ifstream f("./static/profile");
+    ifstream f("./static/" + channel->get_user_type() + "_profile");
     if(f) {
         ostringstream ss;
         ss << f.rdbuf();
@@ -127,9 +131,11 @@ Response* ProfileHandler::callback(Request *req)
     }
     channel->get_buyed_films_info(&body);
     body += "</table>\n";
-    body += "<h4>Your Credit : " + to_string(channel->get_user_money()) + "</h4>";
+    body += "<br />";
+    body += "<br />";
+    body += "<h2>Your Credit : " + to_string(channel->get_user_money()) + "</h2>\n";
     body += "<form action=\"/profile\" method=\"get\">\n";
-    body += "<input name=\"amount\" type=\"text\" placeholder=\"amount\" />";
+    body += "<input name=\"amount\" type=\"text\" placeholder=\"amount\" />\n";
     body += "<button type=\"submit\" >add cretid</button>\n";
     body += "</body>\n";
     body += "</html>";
@@ -152,17 +158,15 @@ Response* DetailHandler::callback(Request *req)
     res->setHeader("Content-Type", "text/html");
     int film_id = stoi(req->getQueryParam("id"));
     string body;
-    body += "<!DOCTYPE html>\n";
-    body += "<html>\n";
-    body += "<body>\n";
-    body += "<form action=\"/\" method=\"get\">\n";
-    body += "<button type=\"submit\" >Logout</button>\n";
-	body += "</form>\n";
-    body += "<form action=\"p_home\" method=\"get\">\n";
-    body += "<button type=\"submit\">go Home</button>\n";
-    body += "</form>\n";
-    body += "<h2>Film Details</h2>\n";
+    ifstream f("./static/" + channel->get_user_type() + "_detail.html");
+    if(f) {
+        ostringstream ss;
+        ss << f.rdbuf();
+        body = ss.str();
+    }
     channel->get_film_details(stoi(req->getQueryParam("id")),&body);
+    body += "<br />";
+    body += "<br />";
     if(!channel->is_film_publisher(channel->find_film(film_id)) && channel->is_film_on(film_id))
     {
         if(!channel->is_customer_buyed_film(film_id))
@@ -185,6 +189,7 @@ Response* DetailHandler::callback(Request *req)
             body += "</form>\n";
         }
     }
+    body += "<br />";
     channel->get_recommendation_films(stoi(req->getQueryParam("id")),&body);
     body += "</body>\n";
     body += "</html>\n";

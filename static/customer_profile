@@ -28,7 +28,7 @@ button[type=submit] {
   width: 15%;
   background-color: Aquamarine ;
   color: DarkBlue ;
-  padding: 7px 10px;
+  padding: 5px 10px;
   margin: 4px 0;
   border: none;
   border-radius: 10px;
@@ -44,24 +44,24 @@ input[type=text] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-</style>
 
+</style>
 <body>
-	<h1>HOME</h1>
+	<h1>Profile</h1>
 	<form action="/" method="get">
 	<input type="submit" value="Logout">
  	</form>
-	<form action="/profile" method="get">
-	<input type="hidden" name="type" value="c_profile">	
-	<input type="submit" value="Profile">
+	<form action="/c_home" method="get">
+	<input type="submit" value="go Home">
  	</form>
 	<br />
 	<br />
+    
 </body>
 <head>
 <style>
 table {
- 	width:70%;
+ 	width:100%;
 }
 table, th, td {
  	border: 1px solid black;
@@ -84,14 +84,16 @@ table#t01 th {
 </style>
 </head>
 <body>
-	<h2>Films</h2>
-	<table id="t01">
-	<tr>
-		<th>Name</th>
-		<th>Price</th>
-		<th>Year</th>
-		<th>Length</th>
-		<th>Rate</th>
-		<th>Director</th>
-		<th> </th>
-	</tr>
+
+<h2>Buyed Films</h2>
+
+<table id="t01">
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Year</th>
+	<th>Length</th>
+	<th>Rate</th>
+	<th>Director</th>
+	<th> </th>
+  </tr>

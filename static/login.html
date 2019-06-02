@@ -1,16 +1,70 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h2>Login</h2>
-	<form action="/" method="get">
-        	<button type="submit" >Logout</button>
+<style>
+button[type=submit] {
+
+  width: 15%;
+  background-color: Green;
+  color: white;
+  padding: 10px 20px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type=text],[type=password] {
+	
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type=submit] {
+
+  width: 50%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type=text]:focus,[type=password]:focus {
+  background-color: lightblue;
+}
+
+div {
+	width: 50%;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+</style>
+<body >
+
+	<form action="/" method="get">	
+        <button type="submit" >Logout</button>
 	</form>
-    <div>
-      <form action="/login" method="post">
-        <input name="username" type="text" placeholder="Username" />
-        <input name="password" type="password" placeholder="Password" />
-        <button type="submit" >Login</button>
-      </form>
-    </div>
-  </body>
+
+    <h2>Login</h2>
+
+<div>
+  <form action="/login" method="post">
+    <label for="fname">Username</label>
+    <input type="text" id="fname" name="username" placeholder="Your name..">
+    <label for="lname">Password</label>
+    <input type="password" id="lname" name="password" placeholder="Your password..">
+    <input type="submit" value="Login">
+  </form>
+</div>
+
+</body>
 </html>
+

@@ -189,8 +189,9 @@ void Film::get_details(string* body)
     *body += "<li>Director : " + director + "</li>\n" ;
     *body += "<li>Summary : " + summary + "</li>\n" ;
     *body += "</ul>\n";
+    *body += "<br />";
 
-    *body += "<h4>comments : </h4>";
+    *body += "<h3>comments : </h3>";
     if(comments_list.size() != 0)
     {
         *body += "<ol>\n";

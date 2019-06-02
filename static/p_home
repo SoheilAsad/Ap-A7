@@ -1,13 +1,65 @@
 <!DOCTYPE html>
 <html>
+
+<style>
+h1 {
+	color: DarkSlateBlue ;
+	font-size:50px;
+	text-align: center;
+}
+
+body{
+	background-color:DarkTurquoise   ;
+}
+
+input[type=submit] {
+
+  width: 15%;
+  background-color: Green;
+  color: white;
+  padding: 10px 20px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button[type=submit] {
+
+  width: 15%;
+  background-color: Aquamarine ;
+  color: DarkBlue ;
+  padding: 7px 10px;
+  margin: 4px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type=text] {
+	
+  width: 20%;
+	background-color: light  ;
+  padding: 7px 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+</style>
+
 <body>
+	<h1>HOME</h1>
 	<form action="/" method="get">
-        	<button type="submit" >Logout</button>
-	</form>
+	<input type="submit" value="Logout">
+ 	</form>
 	<form action="/profile" method="get">
-        	<button type="submit" >profile</button>
-	</form>
-    <h1>HOME</h1>
+	<input type="hidden" name="type" value="p_profile">
+	<input type="submit" value="Profile">
+ 	</form>
+	<br />
+	<br />
+    
 </body>
 <head>
 <style>
@@ -36,10 +88,10 @@ table#t01 th {
 </head>
 <body>
 
-<h3>Films Published</h3>
+<h2>Films Published</h2>
 
 	<form action="/p_home" method="get">
-		<input name="director" type="text" placeholder="director name" />	
+		<input name="director" type="text" placeholder="director name..." />	
         <button type="submit" >filter</button>
 	</form>
 
